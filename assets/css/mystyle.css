@@ -1,0 +1,13 @@
+@font-face {
+
+    
+	font-family: 'MyWebFont';
+	src: url('../fonts/OpenSans-Regular-webfont.woff') format('woff');
+	     
+}
+
+body {
+
+      font-family: 'MyWebFont' !important;
+      font-size: 15px !important;
+}
