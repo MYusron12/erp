@@ -228,6 +228,39 @@
      $('#cetakKasbankhoBelumRealHoModal').modal('hide');
 
    });
+
+    $(function(){
+        $('#tambahjasa').on('click', function(){
+          var tabel = $('#tabel');
+          var tr = $('#tabel body tr').length;
+          var row_id = tr + 1;
+          var html = "";
+          $.ajax({
+            url: base_url + 'purchasing/get_data_barang',
+            method: 'POST',
+            dataType: 'json',
+            success: function(data){
+              console.log('test');
+              html += '<tr id="row_1">';
+              html += '<td></td>';
+              html += '<td><input type="text" id="detail_permintaan" class="form-control"></td>';
+              html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';
+              html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';
+              html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';
+              html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';
+              html += '<td><input type="number" class="form-control" id="ea" name="ea_1" value="000" readonly /></td>';
+              html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';
+              html += '<td><input type="text" class="form-control" id="qty_1" name="qty[]" onkeyup="getTotal(1)"></td>';
+              html += '<td><input type="text" class="form-control" id="harga_1" name="harga[]" onkeyup="myfunctionHarga(1)"></td>';
+              html += '<td><input type=" text" class="form-control" id="total_1" name="total[]" readonly></td>';
+              html += '<td><button type="button" class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button></td>';
+
+              $('#tabel tbody:last-child').append(html);
+                $('.selectpicker').selectpicker("refresh");
+            }
+          });
+        });
+    });
  </script>
 
 

@@ -813,5 +813,29 @@ class Purchasing_model extends CI_Model
         $this->db->update_batch('permintaan_pembelian_detail', $detail, 'id_permintaan_detail');
     }
 
+    public function insertPermintaanJasaNew()
+    {
+        $department = $this->session->userdata('hub');
+        $userid = $this->session->userdata('iduser');
+        $this->db->insert('permintaan_jasa_header', [
+            'bagian_id' => $this->input->post('bagian_id'), //
+            'tgl_pr_jasa' => $this->input->post('tgl_pr_jasa'), //
+            'department_id' => $department, 
+            'no_pr_jasa' => $this->input->post('no_pr_jasa'), //
+            'nama_request' => $this->input->post('nama_request'), //
+            'remarks' => $this->input->post('remarks'), //
+            'cpr_no' => $this->input->post('cpr_no'), //
+            'verifikasi_kode' => $this->input->post('verifikasi_kode'), //
+            'coding' => $this->input->post('coding'), //
+            'budget_reserved' => $this->input->post('budget_reserved'), //
+            'status' => 1,
+            'status_global' => 1,
+            'created_by' => $userid,
+            'created_at' => date("Y-m-d h:i:sa"),
+            'grandtotal' => $this->input->post('grandtotal'), //
+            'user_id' => $userid,
+            'hub' => $department
+        ]);
+    }
     
 }

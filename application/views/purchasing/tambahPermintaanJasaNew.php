@@ -33,7 +33,6 @@
                             <label for="bagian" class="col-sm-3 col-form-label">Bagian</label>
                             <div class="col-sm-6">
                                 <input name="bagian_id" id="bagian_id" value="<?= $user['nama_bagian']; ?>" class="form-control" readonly>
-                                <input type="hidden" name="bagian" id="bagian" value=""class="form-control">
                             </div>
                         </div>
                     
@@ -84,56 +83,12 @@
                 <hr>
                 <div class="row">
                     <div class="col-lg-12 mt-3">
-                        <input type="button" class="btn btn-primary mb-3" id="add_data_barang" value="Add Barang">
+                        <input type="button" class="btn btn-primary mb-3" id="tambahjasa" value="Add Jasa">
                         <div class="table-responsive">
-                            <table class="table table-bordered w-100" id="data_table_barang">
+                            <table class="table table-bordered w-100" id="tabel">
                                 <thead>
                                     <tr>
-                                        <th scope="col" width="25%">Item Barang</th>
-                                        <th scope="col" width="10%">Satuan</th>
-                                        <th scope="col" width="8%">Qty</th>
-                                        <th scope="col">Harga</th>
-                                        <th scope="col">Total</th>
-                                        <th scope="col">Hapus</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr id="row_1">
-                                        <td>
-                                            <select id="barang_1" name="barang[]" class="form-control selectpicker" data-row-id="row_1" data-style="btn-primary" data-live-search="true" onchange="getItemBarang(1)">
-                                                <option value="">Pilih</option>
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            <input type="text" class="form-control" id="satuan_1" name="satuan[]" readonly>
-                                        </td>
-
-                                        <td>
-                                            <input type="text" class="form-control" id="qty_1" name="qty[]" onkeyup="getTotal(1)">
-                                        </td>
-
-                                        <td>
-                                            <input type="text" class="form-control" id="harga_1" name="harga[]" onkeyup="myfunctionHarga(1)">
-                                        </td>
-
-                                        <td>
-                                            <input type=" text" class="form-control" id="total_1" name="total[]" readonly>
-                                        </td>
-                                        <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow1('1')"><i class="fas fa-times"></i></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 mt-3">
-                        <input type="button" class="btn btn-primary mb-3" id="add_data_barang" value="Add Jasa">
-                        <div class="table-responsive">
-                            <table class="table table-bordered w-100" id="data_table_barang">
-                                <thead>
-                                    <tr>
+                                        <th>No</th>
                                         <th scope="col" width="25%">Detail Permintaan</th>
                                         <th>LOC</th>
                                         <th>EC</th>
@@ -149,52 +104,59 @@
                                 </thead>
                                 <tbody>
                                     <tr id="row_1">
+                                        <td id=""></td>
                                         <td>
-                                            <input type="text" class="form-control">
+                                            <input type="text" id="" class="form-control">
                                         </td>
 
                                         <td>
                                             <select name="" id="" class="form-control selectpicker" data-live-search="true">
                                                 <option value="">Pilih</option>
+                                                <?php foreach ($loc as $row) : ?>
+                                                <option value="<?= $row->kode_loc ?>"><?= $row->kode_loc ?> | <?= $row->nama ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </td>
                                         <td>
                                             <select name="" id="" class="form-control selectpicker" data-live-search="true">
                                                 <option value="">Pilih</option>
+                                                <?php foreach($ec as $row) : ?>
+                                                <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </td>
                                         <td>
                                             <select name="" id="" class="form-control selectpicker" data-live-search="true">
                                                 <option value="">Pilih</option>
+                                                <?php foreach($na as $row) : ?>
+                                                <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </td>
                                         <td>
                                             <select name="" id="" class="form-control selectpicker" data-live-search="true">
                                                 <option value="">Pilih</option>
+                                                <?php foreach($tb as $row) : ?>
+                                                <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </td>
+                                        <td><input type="number" class="form-control" id="" name="" value="000" readonly /></td>
                                         <td>
                                             <select name="" id="" class="form-control selectpicker" data-live-search="true">
                                                 <option value="">Pilih</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select name="" id="" class="form-control selectpicker" data-live-search="true">
-                                                <option value="">Pilih</option>
+                                                <?php foreach($satuan as $row) : ?>
+                                                <option value="<?= $row->id_satuan ?>"><?= $row->nama_satuan ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </td>
 
                                         <td>
-                                            <input type="text" class="form-control" id="qty_1" name="qty[]" onkeyup="getTotal(1)">
+                                            <input type="text" class="form-control" id="" name="" onkeyup="getTotal(1)">
                                         </td>
 
-                                        <td>
-                                            <input type="text" class="form-control" id="harga_1" name="harga[]" onkeyup="myfunctionHarga(1)">
-                                        </td>
-
-                                        <td>
-                                            <input type=" text" class="form-control" id="total_1" name="total[]" readonly>
-                                        </td>
+                                        <td><input type="text" class="form-control" id="" name="" onkeyup="myfunctionHarga(1)"></td>
+                                        <td><input type=" text" class="form-control" id="" name="" readonly></td>
                                         <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow1('1')"><i class="fas fa-times"></i></button></td>
                                     </tr>
                                 </tbody>
@@ -207,7 +169,7 @@
                         <div class="form-group row justify-content-end">
                             <label for="grandtotalbarang" class="col-sm-2 col-form-label font-weight-bold">Grand Total</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control font-weight-bold" id="grandtotalbarang" name="grandtotalbarang" readonly>
+                                <input type="text" class="form-control font-weight-bold" id="grandtotal" name="grandtotal" readonly>
                             </div>
                         </div>
                     </div>
@@ -227,3 +189,4 @@
 
 </div>
 <!-- End of Main Content -->
+

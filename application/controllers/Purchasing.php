@@ -964,13 +964,28 @@ class Purchasing extends CI_Controller {
         $data['title'] = 'Tambah Permintaan Jasa New';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->model('General_model', 'gnrl');
+        $data['loc'] = $this->db->get('departement')->result();
+        $data['ec'] = $this->db->get('coa_ec')->result();
+        $data['na'] = $this->db->get('coa_na')->result();
+        $data['tb'] = $this->db->get('coa_tb')->result();
         $data['noprjs'] = $this->gnrl->no('PR');$email = $this->session->userdata('email');
         $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('purchasing/tambahPermintaanjasanew', $data);
-        $this->load->view('templates/footer');
+        $data['satuan'] = $this->db->get('satuan')->result();
+        $data['bagian'] = $this->db->get('bagian')->result();
+        $data['ppn'] = [['nppn' => 1, 'persen' => '1%'], ['nppn' => 10, 'persen' => '10%'], ['nppn' => 11, 'persen' => '11%']];
+        $data['pph'] = [['npph' => 2, 'persen' => '2%'], ['npph' => 4, 'persen' => '4%'], ['npph' => 10, 'persen' => '10%']];
+        $this->form_validation->set_rules('remarks','Remarks', 'required');
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('purchasing/tambahPermintaanjasanew', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->purchasing->insertPermintaanJasaNew();
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Diupdate!</div>');
+            redirect('purchasing/permintaanJasaNew');
+        }
     }
     public function editPermintaanJasaNew($id)
     {
