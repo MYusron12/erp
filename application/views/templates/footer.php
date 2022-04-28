@@ -229,8 +229,14 @@
 
    });
 
-    $(function(){
-        $('#tambahjasa').on('click', function(){
+  $('#total').on("change", function(){
+    var jumlah = document.getElementById('#qty');
+    var harga = document.getElementById('#harga');
+    var total = harga * jumlah;
+  })
+
+   $(function(){
+     $('#tambahjasa').on('click', function(){
           var tabel = $('#tabel');
           var tr = $('#tabel body tr').length;
           var row_id = tr + 1;
@@ -242,7 +248,7 @@
             success: function(data){
               console.log('test');
               html += '<tr id="row_1">';
-              html += '<td></td>';
+              // html += '<td></td>';
               html += '<td><input type="text" id="detail_permintaan" class="form-control"></td>';
               html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';
               html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';

@@ -32,7 +32,8 @@
                         <div class="form-group row">
                             <label for="bagian" class="col-sm-3 col-form-label">Bagian</label>
                             <div class="col-sm-6">
-                                <input name="bagian_id" id="bagian_id" value="<?= $user['nama_bagian']; ?>" class="form-control" readonly>
+                            <input type="hidden"name="bagian_id" id="bagian_id" value="<?= $user['idbagian'];?>"class="form-control">
+                                <input name="bagian" id="bagian" value="<?= $user['nama_bagian']; ?>" class="form-control" readonly>
                             </div>
                         </div>
                     
@@ -88,7 +89,7 @@
                             <table class="table table-bordered w-100" id="tabel">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
+                                        <!-- <th>No</th> -->
                                         <th scope="col" width="25%">Detail Permintaan</th>
                                         <th>LOC</th>
                                         <th>EC</th>
@@ -104,13 +105,15 @@
                                 </thead>
                                 <tbody>
                                     <tr id="row_1">
-                                        <td id=""></td>
+                                        <!-- <td id="no"></td> -->
                                         <td>
-                                            <input type="text" id="" class="form-control">
+                                            <input type="text" id="deskripsi_jasa" name="deskripsi_jasa" class="form-control">
                                         </td>
+                                        <input type="hidden" name="id_permintaan_jasa" id="id_permintaan_jasa" value="">
 
+                                        <!-- belum di buat field -->
                                         <td>
-                                            <select name="" id="" class="form-control selectpicker" data-live-search="true">
+                                            <select name="" id="" class="form-control selectpicker" data-style="btn-primary"data-live-search="true">
                                                 <option value="">Pilih</option>
                                                 <?php foreach ($loc as $row) : ?>
                                                 <option value="<?= $row->kode_loc ?>"><?= $row->kode_loc ?> | <?= $row->nama ?></option>
@@ -118,7 +121,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select name="" id="" class="form-control selectpicker" data-live-search="true">
+                                            <select name="" id="" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
                                                 <option value="">Pilih</option>
                                                 <?php foreach($ec as $row) : ?>
                                                 <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
@@ -126,7 +129,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select name="" id="" class="form-control selectpicker" data-live-search="true">
+                                            <select name="" id="" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
                                                 <option value="">Pilih</option>
                                                 <?php foreach($na as $row) : ?>
                                                 <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
@@ -134,7 +137,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select name="" id="" class="form-control selectpicker" data-live-search="true">
+                                            <select name="" id="" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
                                                 <option value="">Pilih</option>
                                                 <?php foreach($tb as $row) : ?>
                                                 <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
@@ -142,8 +145,11 @@
                                             </select>
                                         </td>
                                         <td><input type="number" class="form-control" id="" name="" value="000" readonly /></td>
+                                        <!-- end -->
+
+
                                         <td>
-                                            <select name="" id="" class="form-control selectpicker" data-live-search="true">
+                                            <select name="satuan" id="satuan" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
                                                 <option value="">Pilih</option>
                                                 <?php foreach($satuan as $row) : ?>
                                                 <option value="<?= $row->id_satuan ?>"><?= $row->nama_satuan ?></option>
@@ -152,11 +158,11 @@
                                         </td>
 
                                         <td>
-                                            <input type="text" class="form-control" id="" name="" onkeyup="getTotal(1)">
+                                            <input type="text" class="form-control" id="qty" name="qty" onkeyup="getTotal(1)">
                                         </td>
 
-                                        <td><input type="text" class="form-control" id="" name="" onkeyup="myfunctionHarga(1)"></td>
-                                        <td><input type=" text" class="form-control" id="" name="" readonly></td>
+                                        <td><input type="text" class="form-control" id="harga" name="harga" onkeyup="myfunctionHarga(1)"></td>
+                                        <td><input type=" text" class="form-control" id="total" name="total" readonly></td>
                                         <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow1('1')"><i class="fas fa-times"></i></button></td>
                                     </tr>
                                 </tbody>

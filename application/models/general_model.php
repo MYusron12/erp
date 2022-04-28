@@ -7,7 +7,7 @@ class General_model extends CI_Model {
     public function no($trx) {
         if ($trx == 'PR') {
             $kode = '';
-            $idbagian = $this->session->userdata('bagian_id');
+            $idbagian = $this->session->userdata('bagian_id'); //
             $query = $this->db->query("select * from counter a join bagian b on b.idbagian = a.id_bagian where a.id_bagian='$idbagian' and a.transaksi='$trx'");
             foreach ($query->result_array() as $row):
                 if ($row['jumlah'] > 8) {

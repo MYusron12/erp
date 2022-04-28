@@ -817,9 +817,11 @@ class Purchasing_model extends CI_Model
     {
         $department = $this->session->userdata('hub');
         $userid = $this->session->userdata('iduser');
+
+        // baris 822 - 840 blok program insert header
         $this->db->insert('permintaan_jasa_header', [
-            'bagian_id' => $this->input->post('bagian_id'), //
-            'tgl_pr_jasa' => $this->input->post('tgl_pr_jasa'), //
+            'bagian_id' => $userid, //
+            'tgl_pr_jasa' => date('Y-m-d', strtotime($this->input->post('tgl_pr_jasa') )), //
             'department_id' => $department, 
             'no_pr_jasa' => $this->input->post('no_pr_jasa'), //
             'nama_request' => $this->input->post('nama_request'), //
@@ -836,6 +838,23 @@ class Purchasing_model extends CI_Model
             'user_id' => $userid,
             'hub' => $department
         ]);
+
+        $idpermintaanjasa = $this->db->insert_id();
+        // blok program insert detail
+        $this->db->insert('permintaan_jasa_detail', [
+            'id_permintaan_jasa' => $idpermintaanjasa,
+            'deskripsi_jasa' => $this->input->post('deskripsi_jasa'),
+            'satuan' => $this->input->post('satuan'),
+            'qty' => $this->input->post('qty'),
+            'harga' => $this->input->post('harga'),
+            'keterangan' => 'test', //
+            'total' => 2000, //
+            'status' => 1
+        ]);
+
+        $bagian_id = $this->session->userdata('bagian_id');
+
+        $this->db->query("update counter set jumlah=+jumlah+1 where transaksi='PR' and status=0 and id_bagian='$bagian_id'");
     }
 
     public function getPermintaanJasaNew()

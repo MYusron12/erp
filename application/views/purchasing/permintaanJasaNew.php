@@ -24,16 +24,18 @@
                             </thead>
                             <tbody>
                                 <?php $i = 1; foreach($permintaanjasa as $p) : ?>
-                                <td><?= $i++ ?></td>
-                                <td><?= $p['tgl_pr_jasa'] ?></td>
-                                <td><?= $p['no_pr_jasa'] ?></td>
-                                <td><?= $p['bagian_id'] ?></td>
-                                <td><?= $p['grandtotal'] ?></td>
-                                <td><?= $p['status'] ?></td>
-                                <td>
-                                    <a href="<?= base_url() ?>" class="badge badge-success">edit</a>
-                                    <a href="<?= base_url() ?>" class="badge badge-danger">hapus</a>
-                                </td>
+                                <tr>
+                                    <td><?= $i++ ?></td>
+                                    <td><?= $p['tgl_pr_jasa'] ?></td>
+                                    <td><?= $p['no_pr_jasa'] ?></td>
+                                    <td><?= $p['bagian_id'] ?></td>
+                                    <td><?= $p['grandtotal'] ?></td>
+                                    <td><?= $p['status'] ?></td>
+                                    <td>
+                                        <a href="<?= base_url() ?>" class="badge badge-success">edit</a>
+                                        <a href="<?= base_url() ?>" class="badge badge-danger">hapus</a>
+                                    </td>
+                                </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>

@@ -939,7 +939,7 @@ class Purchasing extends CI_Controller {
         }
     }
 
-    public function permintaanJasaNew()
+    public function permintaanJasaNew() //permintaan jasa new
     {
         # code...
         // no, tanggal pj, no pj, request, total, status, action
@@ -952,15 +952,14 @@ class Purchasing extends CI_Controller {
         $this->load->view('purchasing/permintaanjasanew', $data);
         $this->load->view('templates/footer');
     }
-    public function viewPermintaanJasaNew($id)
+    public function viewPermintaanJasaNew($id) //view oermintaan jasa new
     {
         # code...
         // header : no pj, tgl pj, bagian, nama request, remark, cpr no, verivikasi kode, coding, budget
         // detail : no, detail permintaan, jumlah, satuan, harga, total -> grand total
     }
-    public function tambahPermintaanJasaNew()
+    public function tambahPermintaanJasaNew() //tambah oermintaan jasa new
     {
-        # code...
         $data['title'] = 'Tambah Permintaan Jasa New';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->model('General_model', 'gnrl');
@@ -968,10 +967,13 @@ class Purchasing extends CI_Controller {
         $data['ec'] = $this->db->get('coa_ec')->result();
         $data['na'] = $this->db->get('coa_na')->result();
         $data['tb'] = $this->db->get('coa_tb')->result();
-        $data['noprjs'] = $this->gnrl->no('PR');$email = $this->session->userdata('email');
+        $data['noprjs'] = $this->gnrl->no('PR');
+        $email = $this->session->userdata('email');
         $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array();
         $data['satuan'] = $this->db->get('satuan')->result();
         $data['bagian'] = $this->db->get('bagian')->result();
+        // var_dump($data['bagian']);
+        // die;
         $data['ppn'] = [['nppn' => 1, 'persen' => '1%'], ['nppn' => 10, 'persen' => '10%'], ['nppn' => 11, 'persen' => '11%']];
         $data['pph'] = [['npph' => 2, 'persen' => '2%'], ['npph' => 4, 'persen' => '4%'], ['npph' => 10, 'persen' => '10%']];
         $this->form_validation->set_rules('remarks','Remarks', 'required');
@@ -982,18 +984,22 @@ class Purchasing extends CI_Controller {
             $this->load->view('purchasing/tambahPermintaanjasanew', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->purchasing->insertPermintaanJasaNew();
+            $this->purchasing->insertPermintaanJasaNew(); //fungsi model untuk insert permintaan_jasa_header dan detai
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Diupdate!</div>');
             redirect('purchasing/permintaanJasaNew');
         }
     }
-    public function editPermintaanJasaNew($id)
+    public function editPermintaanJasaNew($id) //edit permintaan jasa new
     {
         # code...
     }
-    public function hapusPermintaanJasaNew($id)
+    public function hapusPermintaanJasaNew($id) // hapus permintaan jasa new
     {
-        # code...
+        $this->db->where('id', $id);
+        $this->db->update('permintaan_jasa_header', [
+            // datanya disini
+            // pake sift delete, berarti ubah flag is_view 0=jangan ditampilin, 1=ditampilin
+        ]);
     }
 
 }
