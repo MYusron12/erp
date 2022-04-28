@@ -23,13 +23,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <td>no</td>
-                                <td>tgl</td>
-                                <td>no</td>
-                                <td>user</td>
-                                <td>total</td>
-                                <td>status</td>
-                                <td>act</td>
+                                <?php $i = 1; foreach($permintaanjasa as $p) : ?>
+                                <td><?= $i++ ?></td>
+                                <td><?= $p['tgl_pr_jasa'] ?></td>
+                                <td><?= $p['no_pr_jasa'] ?></td>
+                                <td><?= $p['bagian_id'] ?></td>
+                                <td><?= $p['grandtotal'] ?></td>
+                                <td><?= $p['status'] ?></td>
+                                <td>
+                                    <a href="<?= base_url() ?>" class="badge badge-success">edit</a>
+                                    <a href="<?= base_url() ?>" class="badge badge-danger">hapus</a>
+                                </td>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>

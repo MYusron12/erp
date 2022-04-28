@@ -945,7 +945,7 @@ class Purchasing extends CI_Controller {
         // no, tanggal pj, no pj, request, total, status, action
         $data['title'] = 'Permintaan Jasa New';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        // $data['permintaanjasa'] = $this->purchasing->getPermintaanJasa();
+        $data['permintaanjasa'] = $this->purchasing->getPermintaanJasaNew();
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/topbar', $data);

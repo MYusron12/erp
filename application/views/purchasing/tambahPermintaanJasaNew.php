@@ -177,7 +177,7 @@
                 <div class="row mt-3">
                     <div class="col-lg-6">
                         <button type="submit" class="btn btn-primary"><i class="far fa-save"></i>Simpan</button>
-                        <a href="<?= base_url('purchasing/index') ?>" class="btn btn-danger"><i class="fas fa-times"></i>Batal</a>
+                        <a href="<?= base_url('purchasing/permintaanJasaNew') ?>" class="btn btn-danger"><i class="fas fa-times"></i>Batal</a>
                     </div>
                 </div>
             </form>

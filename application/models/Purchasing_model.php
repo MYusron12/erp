@@ -837,5 +837,11 @@ class Purchasing_model extends CI_Model
             'hub' => $department
         ]);
     }
+
+    public function getPermintaanJasaNew()
+    {
+        $query = "select * from permintaan_jasa_header";
+        return $this->db->query($query)->result_array();
+    }
     
 }
