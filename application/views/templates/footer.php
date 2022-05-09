@@ -249,7 +249,7 @@
               console.log('test');
               html += '<tr id="row_1">';
               // html += '<td></td>';
-              html += '<td><input type="text" id="detail_permintaan" class="form-control"></td>';
+              html += '<td><textarea name="deskrpsi_jasa" id="deskripsi_jasa" cols="30" rows="10"></textarea></td>';
               html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';
               html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';
               html += '<td><select name="" id="" class="form-control selectpicker" data-live-search="true"><option value="">Pilih</option></select></td>';

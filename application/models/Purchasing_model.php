@@ -22,9 +22,10 @@ class Purchasing_model extends CI_Model
         $this->db->from('permintaan_pembelian_header');
         $this->db->join('departement', 'permintaan_pembelian_header.id_departement = departement.id_departement');
         $this->db->join('bagian', 'permintaan_pembelian_header.id_bagian = bagian.idbagian');
-           $this->db->order_by('id_permintaan', 'desc');
+        $this->db->order_by('id_permintaan', 'desc');
         $query = $this->db->get()->result();
         return $query;
+
     }
     public function get_data_header_id($id)
     {

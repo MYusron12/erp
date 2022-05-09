@@ -40,7 +40,7 @@
                         <div class="form-group row">
                             <label for="namarequest" class="col-sm-3 col-form-label">Nama Request</label>
                             <div class="col-sm-6">
-                                   <input type="text"name="namarequest" id="bagian" value="<?= $user['name'];?>"class="form-control">
+                                   <input type="text"name="namarequest" id="bagian" value="<?= $user['name'];?>"class="form-control" readonly>
                             </div>
                         </div>
 

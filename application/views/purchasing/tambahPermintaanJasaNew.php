@@ -107,13 +107,13 @@
                                     <tr id="row_1">
                                         <!-- <td id="no"></td> -->
                                         <td>
-                                            <input type="text" id="deskripsi_jasa" name="deskripsi_jasa" class="form-control">
+                                        <textarea name="deskrpsi_jasa" id="deskripsi_jasa" cols="30" rows="10"></textarea>
                                         </td>
-                                        <input type="hidden" name="id_permintaan_jasa" id="id_permintaan_jasa" value="">
+                                        <!-- <input type="hidden" name="id_permintaan_jasa_1" id="id_permintaan_jasa[]" value=""> -->
 
                                         <!-- belum di buat field -->
                                         <td>
-                                            <select name="" id="" class="form-control selectpicker" data-style="btn-primary"data-live-search="true">
+                                            <select name="" id="" class="form-control selectpicker" data-live-search="true" data-style="btn-primary">
                                                 <option value="">Pilih</option>
                                                 <?php foreach ($loc as $row) : ?>
                                                 <option value="<?= $row->kode_loc ?>"><?= $row->kode_loc ?> | <?= $row->nama ?></option>
@@ -156,11 +156,9 @@
                                                 <?php endforeach; ?>
                                             </select>
                                         </td>
-
                                         <td>
                                             <input type="text" class="form-control" id="qty" name="qty" onkeyup="getTotal(1)">
                                         </td>
-
                                         <td><input type="text" class="form-control" id="harga" name="harga" onkeyup="myfunctionHarga(1)"></td>
                                         <td><input type=" text" class="form-control" id="total" name="total" readonly></td>
                                         <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow1('1')"><i class="fas fa-times"></i></button></td>

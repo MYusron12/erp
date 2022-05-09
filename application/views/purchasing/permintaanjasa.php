@@ -25,6 +25,8 @@
                             <tbody>
                                 <?php $i = 1;
                                 foreach ($jasa as $row) : ?>
+                                    <?php if ($row->status == 0) ?>
+                                        <?php $status = '<p class ="text-danger" ><b>Rejected</b></p>'; ?>
                                     <?php if ($row->status == 1) : ?>
                                         <?php $status = '<p class ="text-primary" ><b>PR Baru (Waiting Approval)</b></p>';  ?>
                                     <?php elseif ($row->status == 2) : ?>

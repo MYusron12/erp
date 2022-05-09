@@ -1,30 +1,31 @@
 <?php
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Purchasing extends CI_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        check_login();
+    public function __construct() { //function yg udh ada di class berubah namanya jadi method
+        parent::__construct(); 
+        check_login(); 
         $this->load->model('Purchasing_model', 'purchasing');
         $this->load->model('Barang_model', 'barang');
     }
 
+    // 1
     public function index() {
-        $data['title'] = "Permintaan Pembelian";
+        $data['title'] = "Permintaan Pembelian"; //$title;
 
-        $this->load->model('General_model', 'gnrl');
+        $this->load->model('General_model', 'gnrl'); 
         $email = $this->session->userdata('email');
         $bagian_id = $this->session->userdata('bagian_id');
         $role = $this->session->userdata('role_id');
-        $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array();
+
+        $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array(); //select blblab
+
         if ($role == '1') {
             $data['permintaan'] = $this->purchasing->get_data_permintaan_all();
         } else {
             $data['permintaan'] = $this->purchasing->get_data_permintaan($bagian_id);
         }
-
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
@@ -33,6 +34,7 @@ class Purchasing extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
+    // 2
     public function create() {
         $data['title'] = "Form Permintaan Pembelian";
 
@@ -50,8 +52,6 @@ class Purchasing extends CI_Controller {
         $this->form_validation->set_rules('coding', 'Coding', 'required');
         //$this->form_validation->set_rules('cprno', 'Cpr No', 'required');
         $this->form_validation->set_rules('bagian', 'Bagian', 'required');
-
-
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
             $this->load->view('templates/sidebar', $data);
@@ -75,8 +75,6 @@ class Purchasing extends CI_Controller {
         echo json_encode($data);
     }
     
-    
-
     function get_data_barang_id() {
         $this->db->select('barang.*, satuan.nama_satuan, categori.nama_categori');
         $this->db->from('barang');
@@ -87,6 +85,7 @@ class Purchasing extends CI_Controller {
         echo json_encode($data);
     }
 
+    // 3
     public function view($id) {
         $data['title'] = "View Data Permintaan";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
@@ -108,6 +107,7 @@ class Purchasing extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
+    // 4
     public function edit($id) {
         $data['title'] = "Edit Data Permintaan";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
@@ -143,6 +143,7 @@ class Purchasing extends CI_Controller {
         redirect('purchasing/index');
     }
 
+    // 5
     public function hapuspr($id) {
         $this->db->where('id_permintaan', $id);
         $this->db->delete('permintaan_pembelian_header');
@@ -734,10 +735,8 @@ class Purchasing extends CI_Controller {
     public function addipos() {
         $data['title'] = "Create IPO PR";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-
-
         $this->purchasing->ipo();
-		$update = $this->db->query("update counter set jumlah=+jumlah+1 where transaksi='IPO' and status=0 and id_bagian='$bagian_id'");
+		$update = $this->db->query("update counter set jumlah=+jumlah+1 where transaksi='IPO' and status=0 and id_bagian=''");
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Diupdate!</div>');
         redirect('purchasing/dataipo');
     }
@@ -972,8 +971,6 @@ class Purchasing extends CI_Controller {
         $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array();
         $data['satuan'] = $this->db->get('satuan')->result();
         $data['bagian'] = $this->db->get('bagian')->result();
-        // var_dump($data['bagian']);
-        // die;
         $data['ppn'] = [['nppn' => 1, 'persen' => '1%'], ['nppn' => 10, 'persen' => '10%'], ['nppn' => 11, 'persen' => '11%']];
         $data['pph'] = [['npph' => 2, 'persen' => '2%'], ['npph' => 4, 'persen' => '4%'], ['npph' => 10, 'persen' => '10%']];
         $this->form_validation->set_rules('remarks','Remarks', 'required');
@@ -993,13 +990,14 @@ class Purchasing extends CI_Controller {
     {
         # code...
     }
-    public function hapusPermintaanJasaNew($id) // hapus permintaan jasa new
+    public function deletePermintaanJasaNew($id) // hapus permintaan jasa new
     {
-        $this->db->where('id', $id);
-        $this->db->update('permintaan_jasa_header', [
-            // datanya disini
-            // pake sift delete, berarti ubah flag is_view 0=jangan ditampilin, 1=ditampilin
-        ]);
+        $this->db->delete('permintaan_jasa_detail', ['id_permintaan_jasa' => $id]);
+        $this->db->delete('permintaan_jasa_header', ['id_permintaan_jasa' => $id]);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Dihapus!</div>');
+        redirect('purchasing/permintaanJasaNew');
     }
+
+    
 
 }
