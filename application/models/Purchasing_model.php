@@ -821,7 +821,7 @@ class Purchasing_model extends CI_Model
 
         // baris 822 - 840 blok program insert header
         $this->db->insert('permintaan_jasa_header', [
-            'bagian_id' => $userid, //
+            'bagian_id' => $this->input->post('bagian_id'), //
             'tgl_pr_jasa' => date('Y-m-d', strtotime($this->input->post('tgl_pr_jasa') )), //
             'department_id' => $department, 
             'no_pr_jasa' => $this->input->post('no_pr_jasa'), //
@@ -841,18 +841,40 @@ class Purchasing_model extends CI_Model
         ]);
 
         $idpermintaanjasa = $this->db->insert_id();
+        $loc = $this->input->post('loc');
+        $ec = $this->input->post('ec');
+        $na = $this->input->post('na');
+        $tb = $this->input->post('tb');
+        $ea = $this->input->post('ea');
+        $desk = $this->input->post('deskripsi_jasa');
+        $satuan = $this->input->post('satuan');
+        $qty = $this->input->post('qty');
+        $harga = $this->input->post('harga');
+        $total = $this->input->post('total');
         // blok program insert detail
-        $this->db->insert('permintaan_jasa_detail', [
-            'id_permintaan_jasa' => $idpermintaanjasa,
-            'deskripsi_jasa' => $this->input->post('deskripsi_jasa'),
-            'satuan' => $this->input->post('satuan'),
-            'qty' => $this->input->post('qty'),
-            'harga' => $this->input->post('harga'),
-            'keterangan' => 'test', //
-            'total' => 2000, //
-            'status' => 1
-        ]);
+        // $this->db->insert('permintaan_jasa_detail', [
+        //     'id_permintaan_jasa' => $idpermintaanjasa,
+        //     'deskripsi_jasa' => $this->input->post('deskripsi_jasa'),
+        //     'satuan' => $this->input->post('satuan'),
+        //     'qty' => $this->input->post('qty'), //jumlah
+        //     'harga' => $this->input->post('harga'),
+        //     'total' => $this->input->post('total'), //
+        //     'coa' => $loc . '-' . $ec . '-' . $na . '-' . $tb . '-' . $ea
+        // ]);
 
+        $detail = [];
+        foreach ($satuan as $key => $value) {
+            $detail[$key] = [
+                'id_permintaan_jasa' => $idpermintaanjasa,
+                'satuan' => $value,
+                'deskripsi_jasa' => $desk[$key],
+                'qty' => $qty[$key],
+                'harga' => $harga[$key],
+                'total' => $total[$key],
+                'coa' => $loc[$key] . '-' . $ec[$key] . '-' . $na[$key] . '-' . $tb[$key] . '-' . $ea[$key]
+            ];
+        }
+        $this->db->insert_batch('permintaan_jasa_detail', $detail);
         $bagian_id = $this->session->userdata('bagian_id');
 
         $this->db->query("update counter set jumlah=+jumlah+1 where transaksi='PR' and status=0 and id_bagian='$bagian_id'");
@@ -860,8 +882,33 @@ class Purchasing_model extends CI_Model
 
     public function getPermintaanJasaNew()
     {
-        $query = "select * from permintaan_jasa_header";
+        $query = "select 
+        * 
+        from permintaan_jasa_header
+        order by id_permintaan_jasa desc";
         return $this->db->query($query)->result_array();
+    }
+    public function permintaanJasaNewHeaderDetailId($id)
+    {
+        $query = "select a.*, b.* from permintaan_jasa_header as a 
+                join permintaan_jasa_detail as b 
+                on b.id_permintaan_jasa=a.id_permintaan_jasa 
+                where a.id_permintaan_jasa = $id";
+        return $this->db->query($query)->row_array();
+    }
+
+    public function get_data_jasa_header_id($id)
+    {
+        $query = "select a.*, b.nama_bagian from permintaan_jasa_header as a
+                    join bagian b on a.bagian_id=b.idbagian
+                    where id_permintaan_jasa = $id";
+        return $this->db->query($query)->row();
+    }
+    public function get_data_jasa_detail_id($id)
+    {
+        $query = "select * from permintaan_jasa_detail a
+                    where id_permintaan_jasa = $id";
+        return $this->db->query($query)->result();
     }
     
 }

@@ -26,7 +26,6 @@ $(function () {
                 html += '<td><input type="text" class="form-control" id="harga_' + row_id + '" name="harga[]" onkeyup="myfunctionHarga(' + row_id + ')"></td>';
                 html += '<td> <input type="text" class="form-control" id="total_' + row_id + '" name="total[]" readonly></td>';
                 html += '<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow1(\'' + row_id + '\')"><i class="fas fa-times"></i></button></td></tr>';
-
                 $('#data_table_barang tbody:last-child').append(html);
                 $('.selectpicker').selectpicker("refresh");
 
