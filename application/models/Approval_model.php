@@ -51,5 +51,38 @@ class Approval_model extends CI_Model
         $query = $this->db->get()->result();
         return $query;
     }
+
+    // jasa new
+    public function get_data_permintaan_jasa_new()
+    {
+        $this->db->select('permintaan_jasa_header.*, departement.nama, bagian.nama_bagian');
+        $this->db->from('permintaan_jasa_header');
+        $this->db->join('departement', 'permintaan_jasa_header.department_id = departement.id_departement');
+        $this->db->join('bagian', 'permintaan_jasa_header.bagian_id = bagian.idbagian');
+        $array=array('status'=> 1,'permintaan_jasa_header.bagian_id'=>$this->session->userdata('bagian_id'));
+        $this->db->where($array);
+        $this->db->order_by('id_permintaan_jasa', 'desc');
+        $query = $this->db->get()->result();
+        return $query;
+    }
+    public function get_data_jasa_header_id($id)
+    {
+        $this->db->select('permintaan_jasa_header.*, departement.nama, bagian.nama_bagian');
+        $this->db->from('permintaan_jasa_header');
+        $this->db->join('departement', 'permintaan_jasa_header.department_id = departement.id_departement');
+        $this->db->join('bagian', 'permintaan_jasa_header.bagian_id = bagian.idbagian');
+        $this->db->where('id_permintaan_jasa', $id);
+        $query = $this->db->get()->row();
+        return $query;
+    }
+    public function get_data_jasa_detail_id($id)
+    {
+        $this->db->select('a.*, c.nama_satuan');
+        $this->db->from('permintaan_jasa_detail a');
+        $this->db->join('satuan c', 'a.satuan = c.id_satuan');
+        $this->db->where('id_permintaan_jasa', $id);
+        $query = $this->db->get()->result();
+        return $query;
+    }
    
 }

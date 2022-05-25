@@ -12,7 +12,7 @@
                 </div>
             <?php endif; ?>
 
-            <form action="" method="post" onsubmit="return validateForm()">
+            <!-- <form action="<?= base_url('purchasing/addrow') ?>" method="post" onsubmit="return validateForm()"> -->
                 <div class=" row">
                     <div class="col-lg-6">
                         <div class="form-group row">
@@ -33,22 +33,21 @@
                             <label for="bagian" class="col-sm-3 col-form-label">Bagian</label>
                             <div class="col-sm-6">
                             <input type="hidden"name="bagian_id" id="bagian_id" value="<?= $jasa['headerjasa']->bagian_id;?>"class="form-control">
-                            <input type="hidden" name="department_id" value="<?= $jasa['headerjasa']->department_id ?>">    
-                            <input name="bagian" id="bagian" value="<?= $jasa['headerjasa']->nama_bagian; ?>" class="form-control" readonly>
+                                <input name="bagian" id="bagian" value="<?= $jasa['headerjasa']->nama_bagian; ?>" class="form-control" readonly>
                             </div>
                         </div>
                     
                         <div class="form-group row">
                             <label for="namarequest" class="col-sm-3 col-form-label">Nama Request</label>
                             <div class="col-sm-6">
-                                   <input type="text" name="nama_request" id="nama_requests" value="<?=  $jasa['headerjasa']->nama_request; ?>"class="form-control" readonly>
+                                   <input type="text" name="nama_request" id="nama_requests" value="<?=  $jasa['headerjasa']->nama_request; ?>"class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="keterangan" class="col-sm-3 col-form-label">Remarks</label>
                             <div class="col-sm-6">
-                                <textarea class="form-control" id="remarks" name="remarks" rows="3" value="" readonly><?=  $jasa['headerjasa']->remarks ?></textarea>
+                                <textarea class="form-control" id="remarks" name="remarks" rows="3" value="" required><?=  $jasa['headerjasa']->remarks ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -70,20 +69,20 @@
                         <div class="form-group row">
                             <label for="coding" class="col-sm-3 col-form-label">Coding</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="coding" name="coding" value="<?=  $jasa['headerjasa']->coding ?>" readonly>
+                                <input type="text" class="form-control" id="coding" name="coding" value="<?=  $jasa['headerjasa']->coding ?>" required>
                             </div>
                         </div>
                          <div class="form-group row">
                             <label for="codingjasa" class="col-sm-3 col-form-label">Budget Reserved</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="budget_reserved" name="budget_reserved" value="<?=  $jasa['headerjasa']->budget_reserved ?>" readonly>
+                                <input type="text" class="form-control" id="budget_reserved" name="budget_reserved" value="<?=  $jasa['headerjasa']->budget_reserved ?>" required>
                             </div>
                         </div>
                     </div>
                 </div>
                 <hr>
 
-                <form action="" method="post">
+                <form action="<?= base_url('purchasing/addrow') ?>">
                 <div class="row">
                     <div class="col-lg-12 mt-3">
                         <!-- <input type="button" class="btn btn-primary mb-3" id="tambahjasa" value="Add Jasa"> -->
@@ -166,9 +165,9 @@
                             </table>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Tambah</button>
-                </div>
-                </form>                                    
+                    <button type="submit">Tambah</button>
+                </div>    
+                </form>                              
 
                 <div class="row">
                     <div class="col-lg-12 mt-3">
@@ -187,67 +186,41 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php if($jasa['detailjasa'] == null) : ?>
-                                    <tr>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        </tr>
-                                <?php else : ?>
                                     <?php $i = 1; ?>
                                     <?php foreach($jasa['detailjasa'] as $key => $value) : ?>
                                         <tr>
                                         <td><?= $i++ ?></td>
                                         <td><?= $value->deskripsi_jasa ?></td>
                                         <td><?= $value->coa ?></td>
-                                        <td><?= $value->nama_satuan ?></td>
+                                        <td><?= $value->satuan ?></td>
                                         <td><?= number_format($value->qty) ?></td>
                                         <td><?= number_format($value->harga) ?></td>
                                         <td><?= number_format($value->total) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
-                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <form action="<?= base_url('purchasing/simpanJasaAll') ?>" method="post">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group row justify-content-end">
-                            <input type="hidden" name="id_permintaan_jasa" id="id_permintaan_jasa" value="<?= $jasa['headerjasa']->id_permintaan_jasa ?>">
                             <label for="grandtotalbarang" class="col-sm-2 col-form-label font-weight-bold">Grand Total</label>
                             <div class="col-sm-3">
-                                <?php 
-                                foreach($jasa['detailjasa'] as $key => $value) 
-                                $totalAll[] = $value->total;
-                                $getTotal = array_sum($totalAll)
-                                ?>
-                                <input 
-                                type="text" 
-                                class="form-control font-weight-bold" 
-                                id="grandtotal" 
-                                name="grandtotal" 
-                                value="<?= $getTotal ?>" 
-                                readonly>
+                                <input type="text" class="form-control font-weight-bold" id="grandtotal" name="grandtotal" value="<?= number_format($jasa['headerjasa']->grandtotal) ?>" readonly>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-lg-6">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-primary"><i class="far fa-save"></i>Simpan</button>
                         <a href="<?= base_url('purchasing/permintaanJasaNew') ?>" class="btn btn-danger"><i class="fas fa-times"></i>Batal</a>
                     </div>
                 </div>
-                </form>
-            </form>
+            <!-- </form> -->
         </div>
     </div>
 

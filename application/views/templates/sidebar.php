@@ -55,6 +55,8 @@
       $this->db->where('status', 1);
       $totalaju = $this->db->query('select * from permintaan_pembelian_header where status = 1 and id_bagian ='.$this->session->userdata('bagian_id').'')->num_rows();
       $totalajus = $this->db->query('select * from permintaan_jasa_all where status=1 and bagian_id ='.$this->session->userdata('bagian_id').'')->num_rows();
+      $totalajusnew = $this->db->query('select * from permintaan_jasa_header where status=1 and bagian_id ='.$this->session->userdata('bagian_id').'')->num_rows();
+      // var_dump($totalajusnew);
       ?>
 
      <?php foreach ($subMenu as $sm) : ?>
@@ -69,14 +71,16 @@
            <a class="nav-link pb-0" href="<?= base_url($sm['url']); ?>">
              <i class="<?= $sm['icon']; ?>"></i>
 
-             <?php if ($sm['title'] == 'PR Barang') : ?>
-               <span><?= $sm['title'] . '<span class="badge badge-primary ml-3">Ada ' . $totalaju . '</span>'; ?></span></a>
-         <?php elseif ($sm['title'] == 'PR Barang Jasa') : ?>
-             <span><?= $sm['title'] . '<span class="badge badge-primary ml-3">Ada ' . $totalajus . '</span>'; ?></span></a>
-             <?php else:?>
-           <span><?= $sm['title']; ?></span></a>
-         <?php endif; ?>
-         </li>
+        <?php if ($sm['title'] == 'PR Barang') : ?>
+          <span><?= $sm['title'] . '<span class="badge badge-primary ml-3">Ada ' . $totalaju . '</span>'; ?></span></a>
+        <?php elseif ($sm['title'] == 'PR Barang Jasa') : ?>
+          <span><?= $sm['title'] . '<span class="badge badge-primary ml-3">Ada ' . $totalajus . '</span>'; ?></span></a>
+        <?php elseif ($sm['title'] == 'PR Jasa New') : ?>
+          <span><?= $sm['title'] . '<span class="badge badge-primary ml-3">Ada ' . $totalajusnew . '</span>'; ?></span></a>
+        <?php else:?>
+          <span><?= $sm['title']; ?></span></a>
+        <?php endif; ?>
+        </li>
 
 
 

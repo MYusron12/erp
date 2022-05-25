@@ -835,7 +835,7 @@ class Purchasing_model extends CI_Model
             'status_global' => 1,
             'created_by' => $userid,
             'created_at' => date("Y-m-d h:i:sa"),
-            'grandtotal' => $this->input->post('grandtotal'), //
+            'grandtotal' => 0,
             'user_id' => $userid,
             'hub' => $department
         ]);
@@ -862,19 +862,19 @@ class Purchasing_model extends CI_Model
         //     'coa' => $loc . '-' . $ec . '-' . $na . '-' . $tb . '-' . $ea
         // ]);
 
-        $detail = [];
-        foreach ($satuan as $key => $value) {
-            $detail[$key] = [
-                'id_permintaan_jasa' => $idpermintaanjasa,
-                'satuan' => $value,
-                'deskripsi_jasa' => $desk[$key],
-                'qty' => $qty[$key],
-                'harga' => $harga[$key],
-                'total' => $total[$key],
-                'coa' => $loc[$key] . '-' . $ec[$key] . '-' . $na[$key] . '-' . $tb[$key] . '-' . $ea[$key]
-            ];
-        }
-        $this->db->insert_batch('permintaan_jasa_detail', $detail);
+        // $detail = [];
+        // foreach ($satuan as $key => $value) {
+        //     $detail[$key] = [
+        //         'id_permintaan_jasa' => $idpermintaanjasa,
+        //         'satuan' => $value,
+        //         'deskripsi_jasa' => $desk[$key],
+        //         'qty' => $qty[$key],
+        //         'harga' => $harga[$key],
+        //         'total' => $total[$key],
+        //         'coa' => $loc[$key] . '-' . $ec[$key] . '-' . $na[$key] . '-' . $tb[$key] . '-' . $ea[$key]
+        //     ];
+        // }
+        // $this->db->insert_batch('permintaan_jasa_detail', $detail);
         $bagian_id = $this->session->userdata('bagian_id');
 
         $this->db->query("update counter set jumlah=+jumlah+1 where transaksi='PR' and status=0 and id_bagian='$bagian_id'");
@@ -899,15 +899,49 @@ class Purchasing_model extends CI_Model
 
     public function get_data_jasa_header_id($id)
     {
-        $query = "select a.*, b.nama_bagian from permintaan_jasa_header as a
+        $query = "select a.*, b.nama_bagian, c.nama, c.kode_loc
+                    from permintaan_jasa_header as a
                     join bagian b on a.bagian_id=b.idbagian
+                    join departement c on a.department_id=c.id_departement
                     where id_permintaan_jasa = $id";
         return $this->db->query($query)->row();
     }
     public function get_data_jasa_detail_id($id)
     {
-        $query = "select * from permintaan_jasa_detail a
+        $query = "select a.*, b.nama_satuan, count(*) as crow from permintaan_jasa_detail a
+                    join satuan b on a.satuan=b.id_satuan
                     where id_permintaan_jasa = $id";
+        return $this->db->query($query)->result();
+    }
+
+    public function tambahRowPermintaanJasaNew()
+    {
+        $this->db->where('id_permintaan_jasa', $this->input->post('id_permintaan_jasa'));
+        $this->db->update('permintaan_jasa_header', [
+            'id_permintaan_jasa' => $this->input->post('id_permintaan_jasa'),
+            'bagian_id' => $this->input->post('bagian_id'),
+            'tgl_pr_jasa' => $this->input->post('tgl_pr_jasa'),
+            'department_id' => $this->input->post('department_id')
+        ]);
+
+        $loc = $this->input->post('loc_row');
+        $ec = $this->input->post('ec_row');
+        $na = $this->input->post('na_row');
+        $tb = $this->input->post('tb_row');
+        $ea = $this->input->post('ea_row');
+        $this->db->insert('permintaan_jasa_detail', [
+            'id_permintaan_jasa' => $this->input->post('id_permintaan_jasa'),
+            'deskripsi_jasa' => $this->input->post('deskripsi_jasa_row'),
+            'satuan' => $this->input->post('satuan_row'),
+            'qty' => $this->input->post('qty_row'),
+            'harga' => $this->input->post('harga_row'),
+            'total' => $this->input->post('total_row'),
+            'coa' => $loc .'-'. $ec .'-'. $na .'-'. $tb .'-'. $ea
+        ]);
+    }
+    public function idmax()
+    {
+        $query = "select max(id_permintaan_jasa) as id from permintaan_jasa_header";
         return $this->db->query($query)->result();
     }
     

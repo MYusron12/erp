@@ -247,38 +247,57 @@
       var total = total.replace(',', '.');
       grandtotalbarang = Number(grandtotalbarang) + Number(total);
     } // /for
-    grandtotalbarang = grandtotalbarang.toFixed(2);
+    // grandtotalbarang = grandtotalbarang.toFixed(2);
     $('#grandtotal').val(grandtotalbarang);  
     console.log(grandtotalbarang);
 }
 
-  function myfunctionHargaJasa(row = null) {
+function myfunctionHargaJasa(row = null) {
   var x = document.getElementById("harga_" + row);
-  x.value = formatRupiah(x.value);
+  // x.value = formatRupiah(x.value);
   if (row) {
       var total = $("#harga_" + row).val();
       var total = total.replace(/[^,\d]/g, '');
       var total = total.replace(',', '.');
       var result = Number(total) * Number($('#qty_' + row).val());
-      $("#total_" + row).val(formatMoney(result));
+      $("#total_" + row).val(result);
       grandtotal();
   } else {
       alert('no row !! please refresh the page');
   }
 }
-
 function getTotalJasa(row = null) {
     if (row) {
         var total = $("#harga_" + row).val();
         // var total = total.replace(/[^,\d]/g, '');
         // var total = total.replace(',', '.');
         var result = Number(total) * Number($('#qty_' + row).val());
-        $("#total_" + row).val(formatMoney(result));
+        $("#total_" + row).val(result);
         grandtotal();
 		//console.log(result);
     } else {
         alert('no row !! please refresh the page');
     }
+}
+
+function myfunctionHargaJasaRow() {
+  var x = document.getElementById("hargarow");
+  // x.value = formatRupiah(x.value);
+      var total = $("#hargarow").val();
+      var total = total.replace(/[^,\d]/g, '');
+      var total = total.replace(',', '.');  
+      var result = Number(total) * Number($('#qtyrow').val());
+      $("#totalrow").val(result);
+      grandtotal();
+}
+function getTotalJasaRow() {
+        var total = $("#hargarow").val();
+        var total = total.replace(/[^,\d]/g, '');
+        var total = total.replace(',', '.');
+        var result = Number(total) * Number($('#qtyrow').val());
+        $("#totalrow").val(result);
+        grandtotal();
+		console.log(result);
 }
 
 function removeRow1Jasa(tr_id) {

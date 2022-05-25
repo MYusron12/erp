@@ -33,6 +33,17 @@ class Approval extends CI_Controller
         $this->load->view('approval/approvalpermintaanbarangjs', $data);
         $this->load->view('templates/footer');
     }
+    public function listjsnew()
+    {
+        $data['title'] = "PR Jasa New";
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['permintaan'] = $this->approval->get_data_permintaan_jasa_new();
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('approval/approvalpermintaanbarangjsnew', $data);
+        $this->load->view('templates/footer');
+    }
     public function viewaproval($id)
     {
         $data['title'] = "Approval PR Barang";
@@ -54,7 +65,6 @@ class Approval extends CI_Controller
         $this->load->view('approval/vpermintaanapproval', $data);
         $this->load->view('templates/footer');
     }
-    
      public function viewaprovaljs($id)
     {
          $data['title'] = "View Permintaan Jasa";
@@ -66,6 +76,27 @@ class Approval extends CI_Controller
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/topbar', $data);
         $this->load->view('approval/viewjasa', $data);
+        $this->load->view('templates/footer');
+    }
+    public function viewaprovaljsnew($id)
+    {
+        $data['title'] = "Approval PR Jasa New";
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $result = [];
+        $headerjasa = $this->approval->get_data_jasa_header_id($id);
+        $result['headerjasa'] = $headerjasa;
+        $detailjasa = $this->approval->get_data_jasa_detail_id($id);
+
+        foreach ($detailjasa as $key => $value) {
+            $result['detailjasa'][] = $value;
+        }
+        $data['jasa'] = $result;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('approval/vpermintaanapprovaljasa', $data);
         $this->load->view('templates/footer');
     }
     
@@ -115,4 +146,30 @@ class Approval extends CI_Controller
         $this->db->where('id_permintaan_jasa', $id);
         $this->db->update('permintaan_jasa_all', $data);
     }
+
+    public function getSetujuPrJasa()
+    {
+        $id = $this->input->post('id_permintaan_jasa', true);
+        $data = [
+            'tanggal_approve' => date('Y-m-d'),
+            'status' => 2
+        ];
+        $this->db->where('id_permintaan_jasa', $id);
+        $this->db->update('permintaan_jasa_header', $data);
+        redirect('approval/listjsnew');
+    }
+
+    public function getTidakSetujuPrJasa()
+    {
+        $id = $this->input->post('id_permintaan_jasa', true);
+        $data = [
+            'tanggal_approve' => date('Y-m-d'),
+            'status' => 0
+        ];
+        $this->db->where('id_permintaan_jasa', $id);
+        $this->db->update('permintaan_jasa_header', $data);
+        redirect('approval/listjsnew');
+    }
+
+    
 }

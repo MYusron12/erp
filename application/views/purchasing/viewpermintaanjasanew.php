@@ -40,14 +40,14 @@
                         <div class="form-group row">
                             <label for="namarequest" class="col-sm-3 col-form-label">Nama Request</label>
                             <div class="col-sm-6">
-                                   <input type="text" name="nama_request" id="nama_requests" value="<?= $jasa['headerjasa']->nama_request; ?>"class="form-control">
+                                   <input type="text" name="nama_request" id="nama_requests" value="<?= $jasa['headerjasa']->nama_request; ?>"class="form-control" readonly>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="keterangan" class="col-sm-3 col-form-label">Remarks</label>
                             <div class="col-sm-6">
-                                <textarea class="form-control" id="remarks" name="remarks" rows="3" value="" required><?= $jasa['headerjasa']->remarks ?></textarea>
+                                <textarea class="form-control" id="remarks" name="remarks" rows="3" value="" required readonly><?= $jasa['headerjasa']->remarks ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -69,14 +69,14 @@
                         <div class="form-group row">
                             <label for="coding" class="col-sm-3 col-form-label">Coding</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="coding" name="coding" value="<?= $jasa['headerjasa']->coding ?>" required>
+                                <input type="text" class="form-control" id="coding" name="coding" value="<?= $jasa['headerjasa']->coding ?>" required readonly>
                             </div>
                         </div>
                          <div class="form-group row">
                             <label for="codingjasa" class="col-sm-3 col-form-label">Budget Reserved</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="budget_reserved" name="budget_reserved"
-                                    value="<?= $jasa['headerjasa']->budget_reserved ?>" required>
+                                    value="<?= $jasa['headerjasa']->budget_reserved ?>" required readonly>
                             </div>
                         </div>
                     </div>
@@ -101,13 +101,15 @@
                                 <tbody>
                                     <?php $i = 1; ?>
                                     <?php foreach($jasa['detailjasa'] as $key => $value) : ?>
+                                        <tr>
                                         <td><?= $i++ ?></td>
                                         <td><?= $value->deskripsi_jasa ?></td>
                                         <td><?= $value->coa ?></td>
-                                        <td><?= $value->satuan ?></td>
+                                        <td><?= $value->nama_satuan ?></td>
                                         <td><?= number_format($value->qty) ?></td>
                                         <td><?= number_format($value->harga) ?></td>
                                         <td><?= number_format($value->total) ?></td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>

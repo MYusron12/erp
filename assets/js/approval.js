@@ -44,7 +44,7 @@ $(function () {
         }
     });
     
-      $('#setujuprjs').on('click', function () {
+    $('#setujuprjs').on('click', function () {
         let id = document.getElementById('idpermintaanjs').value;
         let yakin = confirm('Apakah yakin Setuju ?...');
         if (yakin == true) {
@@ -79,6 +79,50 @@ $(function () {
                     data: { id: id },
                     success: function (data) {
                         document.location.href = base_url + 'approval/listjs';
+                    }
+                });
+                setuju = false;
+            }
+        } else {
+            return false;
+        }
+    });
+
+    $('#setujuprjasa').on('click', function () {
+        let id = document.getElementById('id_permintaan_jasa').value;
+        let yakin = confirm('Apakah yakin Setuju ?...');
+        if (yakin == true) {
+            var setuju = false;
+            if (!setuju) {
+                setuju = true;
+                $.ajax({
+                    url: base_url + 'approval/getSetujuPrJasa',
+                    type: 'post',
+                    data: { id: id },
+                    success: function (data) {
+                        document.location.href = base_url + 'approval/listjsnew';
+                    }
+                });
+                setuju = false;
+            }
+        } else {
+            return false;
+        }
+    });
+
+    $('#tidakprjasa').on('click', function () {
+        let id = document.getElementById('id_permintaan_jasa').value;
+        let yakin = confirm('Apakah Yakin Tidak Setuju ?...');
+        if (yakin == true) {
+            var setuju = false;
+            if (!setuju) {
+                setuju = true;
+                $.ajax({
+                    url: base_url + 'approval/getTidakSetujuPrJasa',
+                    type: 'post',
+                    data: { id: id },
+                    success: function (data) {
+                        document.location.href = base_url + 'approval/listjsnew';
                     }
                 });
                 setuju = false;

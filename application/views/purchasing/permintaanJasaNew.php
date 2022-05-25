@@ -14,13 +14,13 @@
                         <table class="table table-bordered table-hover w-100" id="dataTable">
                             <thead class="bg-primary text-white">
                                 <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Tgl Permintaan Jasa</th>
-                                    <th scope="col">No. Permintaan Jasa</th>
-                                    <th scope="col">User Request</th>
-                                    <th scope="col">Total</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
+                                    <th>No</th>
+                                    <th>Tgl Permintaan Jasa</th>
+                                    <th>No. Permintaan Jasa</th>
+                                    <th>User Request</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,6 +34,13 @@
                                     <?php elseif ($p['status'] == 3) : ?>
                                         <?php $status = '<p class ="text-secondary" ><b>Sudah Buat IPO</b></p>';  ?>
                                     <?php endif;  ?>
+                                    <?php if (($p['status_global'] == 0) && ($p['grandtotal'] < 1000000)): ?>
+                                        <?php $status = '<p class ="text-success" ><b>Silahkan Buat PV</b></p>';  ?>
+                                    <?php elseif (($p['status_global'] == 0) && ($p['grandtotal'] > 1000000)): ?>
+                                        <?php $status = '<p class ="text-secondary" ><b>Belum Buat IPO</b></p>';  ?>
+                                    <?php elseif ($p['status_global'] == 1) : ?>
+                                        <?php $statusg = '<p class="text-primary" ><b>Sudah Buat IPO</b></p>';  ?>
+                                    <?php endif;  ?>
                                 <tr>
                                     <td><?= $i++ ?></td>
                                     <td><?= $p['tgl_pr_jasa'] ?></td>
@@ -42,16 +49,23 @@
                                     <td>Rp. <?= number_format($p['grandtotal']) ?></td>
                                     <td><?= $status ?></td>
                                     <td>
-                                    <?php if ($p['status'] == 2) : ?>
-                                                <a href="<?= base_url('report/cetakpermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-secondary btn-sm" target="_blank"><i class="fa fa-print"></i>Cetak</a>
-                                            <?php endif ?>
-                                            <a href="<?= base_url('purchasing/viewpermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-success btn-sm"><i class="far fa-eye"></i>View</a>
-                                            <?php
-                                            if ($p['status'] < 2) : ?>
-                                                <a href="<?= base_url('purchasing/editpermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i>Edit</a>
-
-                                                <a href="<?= base_url('purchasing/deletepermintaanjasa/') . $p['id_permintaan_jasa']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin Batal ?..')"><i class="fas fa-times"></i>Batal</a>
-                                            <?php endif; ?>
+                                        <!-- kalo baru bikin -->
+                                    <?php if ($p['status'] == 1) { ?>
+                                        <a href="<?= base_url('purchasing/viewpermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-success btn-sm"><i class="far fa-eye"></i>View</a>
+                                        <a href="<?= base_url('purchasing/editpermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i>Edit</a>
+                                        <a href="<?= base_url('purchasing/deletepermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah akan dihapus?')"><i class="fas fa-times"></i>Batal</a>
+                                    
+                                        <!-- sudah approve, grandtotal > 1.000.000 dan status global = 1 -->
+                                        <?php }elseif(($p['status'] == 2) &&  ($p['grandtotal'] > 1000000)){?>
+                                        <a href="<?= base_url('purchasing/addipojasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-secondary  btn-sm"><i class="fa fa-book"></i> IPO</a>
+                                        <a href="<?= base_url('report/printprjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-print"></i>Cetak</a>
+                                        <a href="<?= base_url('purchasing/viewpermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-success btn-sm"><i class="far fa-eye"></i>View</a>
+                                        <?php }elseif ($p['status'] == 0) { ?>
+                                        <a href="<?= base_url('purchasing/deletepermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah akan dihapus?')"><i class="fas fa-times"></i>Batal</a>
+                                        <?php }else{ ?>
+                                        <a href="<?= base_url('report/printprjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-print"></i>Cetak</a>
+                                        <a href="<?= base_url('purchasing/viewpermintaanjasanew/') . $p['id_permintaan_jasa']; ?>" class="btn btn-success btn-sm"><i class="far fa-eye"></i>View</a>
+                                    <?php }?>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
