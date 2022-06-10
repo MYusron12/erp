@@ -67,7 +67,9 @@
  <script src="<?= base_url('assets/'); ?>js/jasa.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
 
-
+<!-- sweetalert -->
+<script src="<?= base_url('assets/js/sweetalert2.all.min.js'); ?>"></script>
+<script src="<?= base_url('assets/js/sweetalert.js'); ?>"></script>
 
  <script type="text/javascript">
    $('.selectpicker').selectpicker();

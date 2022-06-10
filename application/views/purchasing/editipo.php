@@ -201,9 +201,14 @@
                                         <td><?= $value->nama_satuan; ?></td>
                                         <td><input class="form-control" type="text" id="harga_<?= $j; ?>" name="harga[]" value="<?= $value->harga; ?>" onkeyup="myfunctionHarga(<?php echo $j; ?>)"></td>
                                         <td><input class="form-control" type="text" id="total_<?= $j; ?>" name="total[]" value="<?= $value->subtotal; ?>" readonly></td>
+                                        <?php
+                                        $subtotal = $value->subtotal;
+                                        $array[] = $subtotal;
+                                        $hasil = array_sum($array);
+                                        ?>
                                     </tr>
-
-                                <?php
+                                    
+                                    <?php
                                 endforeach; ?>
                             </tbody>
                         </table>
@@ -214,7 +219,8 @@
                         <div class="form-group row justify-content-end">
                             <label for="grandtotalbarang" class="col-sm-2 col-form-label font-weight-bold">Grand Total</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control font-weight-bold" id="grandtotalbarang" name="grandtotalbarang" value="<?= number_format($ipo['headeripo']->grandtotal); ?>" readonly>
+                                <!-- <input type="text" class="form-control font-weight-bold" id="grandtotalbarang" name="grandtotalbarang" value="<?= number_format($ipo['headeripo']->grandtotal); ?>" readonly> -->
+                                <input type="text" class="form-control font-weight-bold" id="grandtotalbarang" name="grandtotalbarang" value="<?= number_format($hasil); ?>" readonly>
                             </div>
                         </div>
                     </div>
@@ -307,4 +313,17 @@
                 $("#grandtotalbarang").val(formatMoney(result));
             });
         });
+</script>
+<script>
+    function pphmanual() {
+        var totalbarang = document.getElementById('totalnet').value;
+        var totalbarang = totalbarang.replace(/[^,\d]/g, '');
+        var totalbarang = totalbarang.replace(',', '.');
+        var pph = $('#pphrupiah').val();
+        var resulttotal = 0;
+        resulttotal = Number(totalbarang) - Number(pph)
+        //console.log(resulttotal);
+        //$('#totalnet').val(formatMoney(resulttotal.toFixed(2)));
+		$('#totalnet').val(resulttotal.toFixed(2));
+    };
 </script>

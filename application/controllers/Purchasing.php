@@ -1,4 +1,7 @@
 <?php
+
+use phpDocumentor\Reflection\Types\This;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Purchasing extends CI_Controller {
@@ -908,10 +911,10 @@ class Purchasing extends CI_Controller {
         $data['noipo'] = $this->gnrl->no('IPO');
 
         $data['suplier'] = $this->db->get('suplier')->result();
-        $data['loc'] = $this->db->get('departement')->result();
+        $data['loc'] = $this->db->get_where('departement', ['kode_loc' => '097'])->result();
         $data['ec'] = $this->db->get('coa_ec')->result();
         $data['na'] = $this->db->get('coa_na')->result();
-        $data['tb'] = $this->db->get('coa_tb')->result();
+        $data['tb'] = $this->db->get_where('coa_tb', ['account' => 10])->result();
         $data['ppn'] = [['nppn' => 1, 'persen' => '1%'], ['nppn' => 10, 'persen' => '10%'],['nppn' => 11, 'persen' => '11%']];
         $data['pph'] = [['npph' => 2, 'persen' => '2%'], ['npph' => 4, 'persen' => '4%'], ['npph' => 10, 'persen' => '10%']];
 
@@ -920,6 +923,7 @@ class Purchasing extends CI_Controller {
         $result['headerjasa'] = $headerjasa;
         $detailjasa = $this->purchasing->get_data_jasa_detail_id($id);
         $bagian = $this->session->userdata('hub');
+
         foreach ($detailjasa as $key => $value) {
             $result['detailjasa'][] = $value;
         }
@@ -933,12 +937,39 @@ class Purchasing extends CI_Controller {
             $this->load->view('templates/footer');
         } else {
 
-            $this->db->query("update permintaan_pembelian_header set status_global='1' where id_permintaan='$id'");
-            
-            $this->purchasing->ipoprjasa();
+            // $this->db->query("update permintaan_jasa_header set status_global='1' where id_permintaan_jasa='$id'");
+            $this->db->query("update permintaan_jasa_header set status='3' where id_permintaan_jasa='$id'");
 
-            redirect('purchasing/dataipo');
+            // $this->db->query("update counter set jumlah=+jumlah+1 where transaksi='IPO' and status=0 and id_bagian='$bagian_id'");
+            
+            // $this->purchasing->ipoprjasa();
+            $this->addiposprjasa();
+
+            // redirect('purchasing/dataipo');
         }
+    }
+
+    public function addiposprjasa() {
+        /* echo '<pre>';
+          echo print_r($_POST);
+          echo '</pre>';
+          die; */
+        $this->load->model('General_model', 'gnrl');
+        $email = $this->session->userdata('email');
+        $bagian_id = $this->session->userdata('bagian_id');
+
+        $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array();
+
+        $data['title'] = "Create IPO PR";
+
+        $update = $this->db->query("update counter set jumlah=+jumlah+1 where transaksi='IPO' and id_bagian='$bagian_id' and status=0");
+
+        // $this->purchasing->ipopr();
+        $this->purchasing->ipoprjasa();
+
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Diupdate!</div>');
+        redirect('purchasing/dataipo');
     }
 
     public function get_data_supplier_id() {
@@ -1055,24 +1086,26 @@ class Purchasing extends CI_Controller {
             $this->load->view('purchasing/tambahPermintaanjasanew', $data);
             $this->load->view('templates/footer');
         } else {
+            $this->purchasing->insertPermintaanJasaNew(); //fungsi model untuk insert permintaan_jasa_header dan detai
+            $this->session->set_flashdata('flash', 'Ditambah');
             $maxid = $this->purchasing->idmax();
             foreach($maxid as $row){
-                $max = $row->id + 1;
+                // $max = $row->id + 1;
+                $max = $row->id;
             }
-            $this->purchasing->insertPermintaanJasaNew(); //fungsi model untuk insert permintaan_jasa_header dan detai
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Disimpan!</div>');
             redirect('purchasing/editPermintaanJasaNew/' . $max);
         }
     }
+
     public function editPermintaanJasaNew($id) //edit permintaan jasa new
     {
         $data['title'] = 'Edit Permintaan Jasa New';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->model('General_model', 'gnrl');
-        $data['loc'] = $this->db->get('departement')->result();
+        $data['loc'] = $this->db->get_where('departement', ['kode_loc' => '097'])->result();
         $data['ec'] = $this->db->get('coa_ec')->result();
         $data['na'] = $this->db->get('coa_na')->result();
-        $data['tb'] = $this->db->get('coa_tb')->result();
+        $data['tb'] = $this->db->get_where('coa_tb', ['account' => 10])->result();
         $data['noprjs'] = $this->gnrl->no('PR');
         $email = $this->session->userdata('email');
         $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array();
@@ -1106,7 +1139,6 @@ class Purchasing extends CI_Controller {
                 'tgl_pr_jasa' => $this->input->post('tgl_pr_jasa'),
                 'department_id' => $this->input->post('department_id')
             ]);
-
             $loc = $this->input->post('loc_row');
             $ec = $this->input->post('ec_row');
             $na = $this->input->post('na_row');
@@ -1121,14 +1153,14 @@ class Purchasing extends CI_Controller {
                 'total' => $this->input->post('total_row'),
                 'coa' => $loc .'-'. $ec .'-'. $na .'-'. $tb .'-'. $ea
             ]);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Diubah!</div>');
+            $this->session->set_flashdata('flash', 'Diubah');
             redirect('purchasing/editPermintaanJasaNew/' . $id);
         }
     }
 
     public function tambahDetailJasaNew($id)
     {
-         $data['title'] = 'Tambah Detail Permintaan Jasa New';
+        $data['title'] = 'Tambah Detail Permintaan Jasa New';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->model('General_model', 'gnrl');
         $data['loc'] = $this->db->get('departement')->result();
@@ -1168,8 +1200,28 @@ class Purchasing extends CI_Controller {
     {
         $this->db->delete('permintaan_jasa_detail', ['id_permintaan_jasa' => $id]);
         $this->db->delete('permintaan_jasa_header', ['id_permintaan_jasa' => $id]);
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Dihapus!</div>');
+        $this->session->set_flashdata('flash', 'Dihapus');
         redirect('purchasing/permintaanJasaNew');
+    }
+    public function deletePermintaanJasaNewId($id)
+    {
+        // $this->db->delete('permintaan_jasa_detail', ['id_jasa_detail' => $id]);
+        
+        // $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Dihapus!</div>');
+        
+        // redirect('purchasing/permintaanJasaNew');
+        // $idjasa = $this->db->get_where('permintaan_jasa_header', ['id_permintaan_jasa' => $id]);
+        // var_dump($idjasa);
+        // die;
+        // $idjasa = "select id_permintaan_jasa from permintaan_pembelian_header where id_permintaan_jasa = $id";
+        // return $this->db->query($idjasa)->result();
+        // var_dump($idjasa);
+        // die;
+        // redirect('purchasing/editPermintaanJasaNew/' . $idjasa);
+        $data = $this->db->get_where('permintaan_jasa_detail', ['id_permintaan_jasa' => $id])->row_array();
+        var_dump($data);
+        die;
+        $this->editPermintaanJasaNew($id);
     }
     public function simpanJasaAll()
     {
@@ -1188,8 +1240,9 @@ class Purchasing extends CI_Controller {
         $this->db->where('id_permintaan_jasa', $id);
         $this->db->update('permintaan_jasa_header', $data);
 
-       $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Diperbarui!</div>');
-       redirect('purchasing/permintaanJasaNew');
+       $this->session->set_flashdata('flash', 'Diubah');
+    //    redirect('purchasing/permintaanJasaNew/');
+       redirect('purchasing/editPermintaanJasaNew/' . $id);
     }
     function coa() {
         $data = $this->db->get('departement')->result_array();
@@ -1200,5 +1253,90 @@ class Purchasing extends CI_Controller {
     {
         $data = $this->db->get('coa_ec')->result_array();
         echo json_encode($data);
+    }
+
+    public function editDetail($id)
+    {
+        $data['title'] = 'Edit Permintaan Jasa New Detail';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $this->load->model('General_model', 'gnrl');
+        $data['loc'] = $this->db->get('departement')->result();
+        $data['ec'] = $this->db->get('coa_ec')->result();
+        $data['na'] = $this->db->get('coa_na')->result();
+        $data['tb'] = $this->db->get('coa_tb')->result();
+        $data['noprjs'] = $this->gnrl->no('PR');
+        $email = $this->session->userdata('email');
+        $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array();
+        $data['satuan'] = $this->db->get('satuan')->result();
+        $data['bagian'] = $this->db->get('bagian')->result();
+        $data['ppn'] = [['nppn' => 1, 'persen' => '1%'], ['nppn' => 10, 'persen' => '10%'], ['nppn' => 11, 'persen' => '11%']];
+        $data['pph'] = [['npph' => 2, 'persen' => '2%'], ['npph' => 4, 'persen' => '4%'], ['npph' => 10, 'persen' => '10%']];
+        $data['permintaanbyid'] = $this->purchasing->permintaanJasaNewHeaderDetailId($id);
+        $data['detailJasa'] = $this->purchasing->detailJasa($id);
+        // $detail = $this->purchasing->detailJasa($id);
+        // var_dump($detail);
+        // die;
+
+        $this->form_validation->set_rules('deskripsi_jasa', 'Deskripsi Jasa', 'required');
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('purchasing/editPermintaanjasanewDetail', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data = [
+                'deskripsi_jasa' => $this->input->post('deskripsi_jasa'),
+                'coa' => $this->input->post('coa'),
+                'satuan' => $this->input->post('satuan'),
+                'qty' => $this->input->post('qty'),
+                'harga' => $this->input->post('harga'),
+                'total' => $this->input->post('total')
+            ];
+            // var_dump($data);
+            // die;
+            // $this->purchasing->editDetail($id);
+            $this->db->where('id_jasa_detail', $id);
+            $this->db->update('permintaan_jasa_detail', $data);
+            $this->session->set_flashdata('flash', 'Diubah');
+            redirect('purchasing/editDetail/' . $id);
+        }
+
+        // $this->purchasing->editDetail();
+        // $id_jasa_detail = $this->input->post('id_jasa_detail', true);
+        // $data = [
+            // 'deskripsi_jasa' => $this->input->post('deskripsi_jasa_modal')
+            // 'deskripsi_jasa' => 1
+        // ];
+        // var_dump($data);
+        // die;
+        // $this->db->where('id_jasa_detail', $id_jasa_detail);
+        // $this->db->update('permintaan_jasa_detail', $data);
+
+        // $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Diubah!</div>');
+
+        // $idjasa = $this->input->post('id_permintaan_jasa');
+        // redirect('purchasing/editPermintaanJasaNew/' . $id);
+    }
+
+    public function editHeader($id) //tambah oermintaan jasa new
+    {
+        $data['title'] = 'Edit Header';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $data['header'] = $this->purchasing->getEditHeader($id);
+        $this->form_validation->set_rules('remarks','Remarks', 'required');
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('purchasing/editHeader', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->purchasing->editHeader($id); //fungsi model untuk insert permintaan_jasa_header dan detai
+            $this->session->set_flashdata('flash', 'Diubah');
+            
+            redirect('purchasing/editPermintaanJasaNew/' . $id);
+        }
     }
 }

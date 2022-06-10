@@ -31,9 +31,10 @@ class General_model extends CI_Model {
             $kodejadi = $trans.'-'.$kode.$dept.'-'.$no.$j.'-'.$emd;
             return $kodejadi;
         }elseif($trx == 'IPO'){
-             $kode = '';
+            $kode = '';
             $idbagian = $this->session->userdata('bagian_id');
             $query = $this->db->query("select * from counter a join bagian b on b.idbagian = a.id_bagian where a.id_bagian='$idbagian' and a.transaksi='$trx'");
+            // $query = $this->db->query("select * from counter where transaksi = '$trx' and id_bagian = $idbagian");
             foreach ($query->result_array() as $row):
                 if ($row['jumlah'] > 8) {
                     $j = $row['jumlah'] + 1;
@@ -42,7 +43,6 @@ class General_model extends CI_Model {
                     $no = '00';
                     $emd=date('m-y');
                     $trans=$row['transaksi'];
-                    
                 } else {
                     $j = $row['jumlah'] + 1;
                     $kode = $row['kode'];

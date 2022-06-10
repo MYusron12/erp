@@ -85,18 +85,30 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $i = 1; ?>
-                                    <?php foreach($jasa['detailjasa'] as $key => $value) : ?>
-                                        <tr>
-                                        <td><?= $i++ ?></td>
-                                        <td><?= $value->deskripsi_jasa ?></td>
-                                        <td><?= $value->coa ?></td>
-                                        <td><?= $value->nama_satuan ?></td>
-                                        <td><?= number_format($value->qty) ?></td>
-                                        <td><?= number_format($value->harga) ?></td>
-                                        <td><?= number_format($value->total) ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
+                                    <?php if(empty($jasa['detailjasa'])) : ?>
+                                            <tr>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                            </tr>
+                                    <?php else : ?>
+                                        <?php $i = 1; ?>
+                                        <?php foreach($jasa['detailjasa'] as $key => $value) : ?>
+                                            <tr>
+                                                <td><?= $i++ ?></td>
+                                                <td><?= $value->deskripsi_jasa ?></td>
+                                                <td><?= $value->coa ?></td>
+                                                <td><?= $value->nama_satuan ?></td>
+                                                <td><?= number_format($value->qty) ?></td>
+                                                <td><?= number_format($value->harga) ?></td>
+                                                <td><?= number_format($value->total) ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

@@ -1,4 +1,7 @@
 <?php
+
+use phpDocumentor\Reflection\Types\This;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Purchasing_model extends CI_Model
@@ -463,13 +466,24 @@ class Purchasing_model extends CI_Model
     }
     public function get_data_ipo_id($id)
     {
-        $this->db->select('ipoheader.*, bagian.kepala_bagian as nama_kepala, suplier.kode_suplier as kode, suplier.suplier as nama_supplier, bagian.nama_bagian as nama_department, permintaan_jasa_all.no_pr_jasa as no_jasa, permintaan_pembelian_header.no_permintaan as no_pembelian, permintaan_jasa_all.bagian_id as bagian_jasa, permintaan_pembelian_header.id_bagian as bagian_pembelian');
+        $this->db->select('ipoheader.*, 
+        bagian.kepala_bagian as nama_kepala, 
+        suplier.kode_suplier as kode, 
+        suplier.suplier as nama_supplier, 
+        bagian.nama_bagian as nama_department, 
+        permintaan_jasa_all.no_pr_jasa as no_jasa, 
+        permintaan_pembelian_header.no_permintaan as no_pembelian, 
+        permintaan_jasa_header.no_pr_jasa as no_pembelian,
+        permintaan_jasa_all.bagian_id as bagian_jasa, 
+        permintaan_pembelian_header.id_bagian as bagian_pembelian,
+        permintaan_jasa_header.bagian_id as bagian_pembelian');
         $this->db->from('ipoheader');
         //$this->db->join('ipodetail', 'ipoheader.id_ipo = ipodetail.ipo_id');
         $this->db->join('suplier', 'suplier.id_suplier = ipoheader.supplier_id');
         $this->db->join('bagian', 'bagian.idbagian = ipoheader.dept_id');
         $this->db->join('permintaan_jasa_all', 'permintaan_jasa_all.id_permintaan_jasa = ipoheader.pr_id', 'left outer');
         $this->db->join('permintaan_pembelian_header', 'permintaan_pembelian_header.id_permintaan = ipoheader.pr_id', 'left outer');
+        $this->db->join('permintaan_jasa_header', 'permintaan_jasa_header.id_permintaan_jasa = ipoheader.pr_id', 'left outer');
         $this->db->where('ipoheader.id_ipo', $id);
         $query = $this->db->get()->row();
         return $query;
@@ -591,6 +605,7 @@ class Purchasing_model extends CI_Model
         $this->db->update_batch('ipodetail', $detail, 'id_ipo_detail');
 
     }
+
     public function ipopr()
     {
 
@@ -646,7 +661,6 @@ class Purchasing_model extends CI_Model
         $harga = str_replace(['.', ','], ['', '.'], $this->input->post('harga', true));
         $total = str_replace(['.', ','], ['', '.'],$this->input->post('total', true));
 
-
         $detail = [];
         foreach ($barangitems as $key => $val) {
 
@@ -668,10 +682,87 @@ class Purchasing_model extends CI_Model
             }
         }
 
+        $this->db->insert_batch('ipodetail', $detail);
+    }
 
+    public function ipoprjasa()
+    {
+        //tangkap data header ipo
+        $noipo = $this->input->post('noipo', true); //
+        $tglpr = date('Y-m-d', strtotime($this->input->post('tglipo', true))); //
+        $store = $this->input->post('store', true); //
+        $locationid = $this->input->post('locationid', true);
+        $remarks = $this->input->post('keteranganipo', true); //
+        $delivery = $this->input->post('delivery', true); //
+        $period = $this->input->post('period', true); //
+        $idpr = $this->input->post('idprjasa', true); //
+        $supplierid = $this->input->post('supplierid', true); //
+        $budget = $this->input->post('budget', true); //
+        $gt = str_replace(['.', ','], ['', '.'], $this->input->post('totalnet', true)); //
+        $pphheader = str_replace(['.', ','], ['', '.'], $this->input->post('pphrupiah', true)); //
+        $ppnheader = str_replace(['.', ','], ['', '.'], $this->input->post('ppnrupiah', true)); //
+        $data = [
+            'dept_id' => $this->session->userdata('bagian_id'),
+            'no_ipo' => $noipo, //
+            'remarks' => $remarks, //
+            'pr_id' => $idpr, //
+            'tgl_ipo' => $tglpr, //
+            'supplier_id' => $supplierid, //
+            'delivery_periode' => $delivery, //
+            'grandtotal' => $gt, //
+            'ppn_header' => $ppnheader, //
+            'pph_header' => $pphheader, //
+            'periode' => $period, //
+            'store' => $store, //
+            'budget' => $budget, //
+            'status' => 3,
+            'status_global' => 1,
+            'created_by' => $this->session->userdata('iduser'),
+            'created_at' => date("Y-m-d h:i:sa"),
+            'is_deleted' => 0,
+        ];
+        $this->db->insert('ipoheader', $data);
+        $id_permintaan = $this->db->insert_id();
+        // $pr = $this->db->query("update permintaan_jasa_header set status_global='1' where id_permintaan_jasa='$idpr'");
+        $pr = $this->db->query("update permintaan_jasa_header set status='3' where id_permintaan_jasa='$idpr'");
+
+        $deskripsi = $this->input->post('deskripsi_jasa', true);
+        //$harga = $this->input->post('harga', true);
+        //$total = $this->input->post('total', true);
+        $loc = $this->input->post('loc', true); //
+        $ec = $this->input->post('ec', true); //
+        $na = $this->input->post('na', true); //
+        $tb = $this->input->post('tb', true); //
+        $ea = $this->input->post('ea', true); //
+        $qty = $this->input->post('qty', true); //
+        $satuan = $this->input->post('nama_satuan', true); //
+        $harga = str_replace(['.', ','], ['', '.'], $this->input->post('harga', true)); //
+        $total = str_replace(['.', ','], ['', '.'],$this->input->post('total', true)); //
+
+        $detail = [];
+        foreach ($deskripsi as $key => $val) {
+            if ($val != '') {
+                $detail[$key] = [
+                    'ipo_id' => $id_permintaan, //
+                    'pr_id' => $idpr, //
+                    'loc' => $loc[$key], //
+                    'ec' => $ec[$key], //
+                    'na' => $na[$key], //
+                    'tb' => $tb[$key], //
+                    'ea' => $ea[$key], //
+                    'barang_id' => $val, //
+                    'qty' => $qty[$key], //
+                    'harga' => $harga[$key], //
+                    'satuan_id' => $satuan[$key], //
+                    'subtotal' => $total[$key], //
+                    'barang_nama' => $deskripsi[$key]
+                ];
+            }
+        }
 
         $this->db->insert_batch('ipodetail', $detail);
     }
+
     public function updatedataprjasa()
     {
 
@@ -899,7 +990,7 @@ class Purchasing_model extends CI_Model
 
     public function get_data_jasa_header_id($id)
     {
-        $query = "select a.*, b.nama_bagian, c.nama, c.kode_loc
+        $query = "select a.*, b.nama_bagian, c.nama, c.kode_loc, b.kepala_bagian
                     from permintaan_jasa_header as a
                     join bagian b on a.bagian_id=b.idbagian
                     join departement c on a.department_id=c.id_departement
@@ -908,7 +999,9 @@ class Purchasing_model extends CI_Model
     }
     public function get_data_jasa_detail_id($id)
     {
-        $query = "select a.*, b.nama_satuan, count(*) as crow from permintaan_jasa_detail a
+        $query = "select a.*, 
+                    b.nama_satuan
+                    from permintaan_jasa_detail a
                     join satuan b on a.satuan=b.id_satuan
                     where id_permintaan_jasa = $id";
         return $this->db->query($query)->result();
@@ -944,5 +1037,57 @@ class Purchasing_model extends CI_Model
         $query = "select max(id_permintaan_jasa) as id from permintaan_jasa_header";
         return $this->db->query($query)->result();
     }
+    public function detailJasa($id)
+    {
+        // return $this->db->get_where('permintaan_jasa_detail', ['id_jasa_detail', $id])->row_array();
+        $query = "select a.*, b.nama_satuan from permintaan_jasa_detail a join satuan b
+        on a.satuan=b.id_satuan            
+        where id_jasa_detail = $id";
+        return $this->db->query($query)->row_array();
+    }
+    public function editDetail()
+    {
+        $deskripsi = $this->input->post('deskripsi_jasa', true);
+        $satuan = $this->input->post('satuan', true);
+        $id_permintaan_jasa = $this->input->post('id_permintaan_jasa', true);
+        $id = $this->input->post('id_detail_jasa');
+        $coa = $this->input->post('coa');
+        $qty = $this->input->post('qty', true);
+        $harga = $this->input->post('harga', true);
+        $total = $this->input->post('total', true);
+        $detail = [
+            'id_permintaan_jasa' => $id_permintaan_jasa,
+            'deskripsi_jasa' => $deskripsi,
+            'satuan' => $satuan,
+            'coa' => $coa,
+            'qty' => $qty,
+            'harga' => $harga,
+            'total' => $total
+        ];
+        $this->db->where('id_jasa_detail', $id);
+        $this->db->update('permintaan_jasa_detail', $detail);
+    }
     
+    public function getEditHeader($id)
+    {
+        $query = "select a.*, b.nama_bagian from permintaan_jasa_header a join bagian b on a.bagian_id=b.idbagian where a.id_permintaan_jasa=$id";
+        return $this->db->query($query)->result();
+    }
+
+    public function editHeader($id)
+    {
+        $data = [
+            'id_permintaan_jasa' => $this->input->post('id_permintaan_jasa'),
+            'no_pr_jasa' => $this->input->post('no_pr_jasa'),
+            'tgl_pr_jasa' => $this->input->post('tgl_pr_jasa'),
+            'nama_request' => $this->input->post('nama_request'),
+            'remarks' => $this->input->post('remarks'),
+            'cpr_no' => $this->input->post('cpr_no'),
+            'verifikasi_kode' => $this->input->post('verifikasi_kode'),
+            'coding' => $this->input->post('coding'),
+            'budget_reserved' => $this->input->post('budget_reserved')
+        ];
+        $this->db->where('id_permintaan_jasa', $id);
+        $this->db->update('permintaan_jasa_header', $data);
+    }
 }

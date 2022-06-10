@@ -529,7 +529,6 @@ class Report extends CI_Controller {
         $data['title'] = "Cetak PR";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-
         $result = [];
         $headerpermintaan = $this->purchasing->get_data_header_id($id);
         $result['headerpermintaan'] = $headerpermintaan;
@@ -542,9 +541,30 @@ class Report extends CI_Controller {
         // $data['pr'] = $this->purchasing->pr($id);
         //  var_dump($data);
 
-
-
         $html = $this->load->view('report/printpr', $data, true);
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-P']);
+        $mpdf->WriteHTML($html);
+        $mpdf->Output();
+    }
+
+    function printprjasanew($id) {
+
+        $data['title'] = "Cetak PR Jasa New";
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $result = [];
+        $headerjasa = $this->purchasing->get_data_jasa_header_id($id);
+        $result['headerjasa'] = $headerjasa;
+        $detailjasa = $this->purchasing->get_data_jasa_detail_id($id);
+
+        foreach ($detailjasa as $key => $value) {
+            $result['detailjasa'][] = $value;
+        }
+        $data['jasa'] = $result;
+        // $data['pr'] = $this->purchasing->pr($id);
+        //  var_dump($data);
+
+        $html = $this->load->view('report/printprjasanew', $data, true);
         $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-P']);
         $mpdf->WriteHTML($html);
         $mpdf->Output();

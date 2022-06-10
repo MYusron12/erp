@@ -3,7 +3,7 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
-    <form action="<?= base_url('purchasing/addipos'); ?>" method="post" onsubmit="return validateForm()">
+    <form action="<?= base_url('purchasing/addiposprjasa'); ?>" method="post" onsubmit="return validateForm()">
 
         <div class="card">
             <div class="card-body">
@@ -118,7 +118,11 @@
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th scope="col" width="2">No</th>
-                                    <th scope="col" width="25%">COA</th>
+                                    <th width="7%">LOC</th>
+                                    <th width="7%">EC</th>
+                                    <th width="7%">NA</th>
+                                    <th width="7%">TB</th>
+                                    <th width="7%">EA</th>
                                     <th scope="col" width="15%">Detail Permintaan</th>
                                     <th scope="col" width="10%">Satuan</th>
                                     <th scope="col" width="8%">Jumlah</th>
@@ -133,9 +137,64 @@
                                 foreach ($jasa['detailjasa'] as $key => $value) : ?>
                                     <tr id="row_<?php echo $j++; ?>">
                                         <td><?= $i++; ?></td>
-                                        <td><input class="form-control" type="text" name="coa[]" value="<?= $value->coa ?>" readonly></td>
-                                        <td><input class="form-control" type="text" value="<?= $value->deskripsi_jasa; ?>" readonly></td>
-                                        <td><input class="form-control" type="text" value="<?= $value->nama_satuan; ?>" readonly><input class="form-control" type="hidden" name="satuan1[]" value="<?= $value->satuan; ?>"></td>
+                                        <!-- <input type="hidden" name="id_jasa_detail[]" id="id_jasa_detail" value="<?= $value->id_jasa_detail ?>"> -->
+
+                                        <?php
+                                        $coa = $value->coa;
+                                        $array = str_split($coa);
+                                        // loc
+                                        $sebelumLoc = array_slice($array, 0, 3);
+                                        $locSlice = implode($sebelumLoc);
+                                        // echo $coa; 
+
+                                        // ec
+                                        $sebelumEc = array_slice($array, 4, 3);
+                                        $ecSlice = implode($sebelumEc);
+                                        
+                                        // na
+                                        $sebelumNa = array_slice($array, 8, 4);
+                                        $naSlice = implode($sebelumNa);
+                                        
+                                        // tb
+                                        $sebelumTb = array_slice($array, 13, 2);
+                                        $tbSlice = implode($sebelumTb);
+                                        ?>
+
+                                        <td>
+                                        <select name="loc[]" id="loc" class="form-control selectpicker" data-style="btn-primary" data-live-search="true" required>
+                                                <option value="<?= $locSlice; ?>"><?= $locSlice; ?></option>
+                                            <?php foreach($loc as $row) : ?>    
+                                                <option value="<?= $row->kode_loc ?>"><?= $row->kode_loc ?> || <?= $row->nama ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        </td>
+                                        <td>
+                                        <select name="ec[]" id="ec" class="form-control selectpicker" data-style="btn-primary" data-live-search="true" required>
+                                                <option value="<?= $ecSlice; ?>"><?= $ecSlice; ?></option>
+                                            <?php foreach($ec as $row) : ?>    
+                                                <option value="<?= $row->account ?>"><?= $row->account ?> || <?= $row->nama ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        </td>
+                                        <td>
+                                        <select name="na[]" id="na" class="form-control selectpicker" data-style="btn-primary" data-live-search="true" required>
+                                                <option value="<?= $naSlice; ?>"><?= $naSlice; ?></option>
+                                            <?php foreach($na as $row) : ?>    
+                                                <option value="<?= $row->account ?>"><?= $row->account ?> || <?= $row->nama ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        </td>
+                                        <td>
+                                        <select name="tb[]" id="tb" class="form-control selectpicker" data-style="btn-primary" data-live-search="true" required>
+                                                <option value="<?=$tbSlice ?>"><?=$tbSlice ?></option>
+                                            <?php foreach($tb as $row) : ?>    
+                                                <option value="<?= $row->account ?>"><?= $row->account ?> || <?= $row->nama ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        </td>
+                                        <td><input class="form-control" type="text" name="ea[]" value="000" readonly></td>
+                                        <td><input class="form-control" type="text" name="deskripsi_jasa[]" value="<?= $value->deskripsi_jasa; ?>" readonly></td>
+                                        <td><input class="form-control" type="text" name="nama_satuan[]" value="<?= $value->nama_satuan; ?>" readonly><input class="form-control" type="hidden" name="satuan1[]" value="<?= $value->satuan; ?>"></td>
                                         <td><input class="form-control" type="text" id="qty_<?= $j; ?>" name="qty[]" value="<?= $value->qty; ?>" onkeyup="getTotal(<?php echo $j; ?>)"></td>
                                         <td><input class="form-control" type="text" id="harga_<?= $j; ?>" name="harga[]" value="<?= $value->harga; ?>" onkeyup="myfunctionHarga(<?php echo $j; ?>)"></td>
                                         <td><input class="form-control" type="text" id="total_<?= $j; ?>" name="total[]" value="<?= $value->total; ?>" readonly></td>
@@ -215,7 +274,7 @@
                 <div class="row mt-5">
                     <div class="col-lg-6">
                         <button type="submit" class="btn btn-primary"><i class="far fa-save"></i>Simpan</button>
-                        <a href="<?= base_url('purchasing/permintaanjasa') ?>" class="btn btn-danger"><i class="fas fa-exchange-alt"></i>Kembali</a>
+                        <a href="<?= base_url('purchasing/permintaanjasanew') ?>" class="btn btn-danger"><i class="fas fa-exchange-alt"></i>Kembali</a>
                     </div>
                 </div>
             </div>
