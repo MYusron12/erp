@@ -25,8 +25,70 @@
                         </div>
                         <div class="form-group row">
                             <label for="tglpr" class="col-sm-3 col-form-label">COA</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="coa" name="coa" value="<?= $detailJasa['coa'] ?>">
+                            <div class="col-6">
+                                <!-- <input type="text" class="form-control" id="coa" name="coa" value="<?= $detailJasa['coa'] ?>"> -->
+                                <?php $coa = $detailJasa['coa']; 
+                                $array = str_split($coa);
+                                // loc
+                                $sebelumLoc = array_slice($array, 0, 3);
+                                $locSlice = implode($sebelumLoc);
+
+                                // ec
+                                $sebelumEc = array_slice($array, 4, 3);
+                                $ecSlice = implode($sebelumEc);
+                                
+                                // na
+                                $sebelumNa = array_slice($array, 8, 4);
+                                $naSlice = implode($sebelumNa);
+                                
+                                // tb
+                                $sebelumTb = array_slice($array, 13, 2);
+                                $tbSlice = implode($sebelumTb);
+                                ?>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="">LOC</label>
+                                        <select name="loc" id="loc" class="form-control selectpicker" data-live-search="true" data-style="btn-primary">
+                                            <option value="<?= $locSlice; ?>"><?= $locSlice; ?></option>
+                                            <?php foreach($loc as $row) : ?>
+                                            <option value="<?= $row->kode_loc ?>"><?= $row->kode_loc ?> | <?= $row->nama ?></option>
+                                        <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="">EC</label>
+                                        <select name="ec" id="ec" class="form-control selectpicker" data-live-search="true" data-style="btn-primary">
+                                            <option value="<?= $ecSlice; ?>"><?= $ecSlice; ?></option>
+                                            <?php foreach($ec as $row) : ?>
+                                            <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
+                                        <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="">NA</label>
+                                        <select name="na" id="na" class="form-control selectpicker" data-live-search="true" data-style="btn-primary">
+                                            <option value="<?= $naSlice; ?>"><?= $naSlice; ?></option>
+                                            <?php foreach($na as $row) : ?>
+                                            <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
+                                        <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="">TB</label>
+                                        <select name="tb" id="tb" class="form-control selectpicker" data-live-search="true" data-style="btn-primary">
+                                            <option value="<?= $tbSlice; ?>"><?= $tbSlice; ?></option>
+                                            <?php foreach($tb as $row) : ?>
+                                            <option value="<?= $row->account ?>"><?= $row->account ?> | <?= $row->nama ?></option>
+                                        <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="">EA</label>
+                                        <input type="text" class="form-control" name="ea" id="ea" value="000">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">

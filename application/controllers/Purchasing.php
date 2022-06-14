@@ -1114,6 +1114,7 @@ class Purchasing extends CI_Controller {
         $data['ppn'] = [['nppn' => 1, 'persen' => '1%'], ['nppn' => 10, 'persen' => '10%'], ['nppn' => 11, 'persen' => '11%']];
         $data['pph'] = [['npph' => 2, 'persen' => '2%'], ['npph' => 4, 'persen' => '4%'], ['npph' => 10, 'persen' => '10%']];
         $data['permintaanbyid'] = $this->purchasing->permintaanJasaNewHeaderDetailId($id);
+        $data['getgrandtotal'] = $this->purchasing->getGrandTotal($id);
         
         $result = [];
         $headerjasa = $this->purchasing->get_data_jasa_header_id($id);
@@ -1132,18 +1133,13 @@ class Purchasing extends CI_Controller {
             $this->load->view('templates/footer');
         } else {
             // $this->purchasing->tambahRowPermintaanJasaNew(); //fungsi model untuk insert permintaan_jasa_header dan detai
-            $this->db->where('id_permintaan_jasa', $this->input->post('id_permintaan_jasa'));
-            $this->db->update('permintaan_jasa_header', [
-                'id_permintaan_jasa' => $this->input->post('id_permintaan_jasa'),
-                'bagian_id' => $this->input->post('bagian_id'),
-                'tgl_pr_jasa' => $this->input->post('tgl_pr_jasa'),
-                'department_id' => $this->input->post('department_id')
-            ]);
+            $getgrandtotal = $this->purchasing->getGrandTotal($id);
             $loc = $this->input->post('loc_row');
             $ec = $this->input->post('ec_row');
             $na = $this->input->post('na_row');
             $tb = $this->input->post('tb_row');
             $ea = $this->input->post('ea_row');
+            // $total = $this->input->post('total_row');
             $data = $this->db->insert('permintaan_jasa_detail', [
                 'id_permintaan_jasa' => $this->input->post('id_permintaan_jasa'),
                 'deskripsi_jasa' => $this->input->post('deskripsi_jasa_row'),
@@ -1152,6 +1148,30 @@ class Purchasing extends CI_Controller {
                 'harga' => $this->input->post('harga_row'),
                 'total' => $this->input->post('total_row'),
                 'coa' => $loc .'-'. $ec .'-'. $na .'-'. $tb .'-'. $ea
+            ]);
+            // $total = $this->input->post('total_row');
+            // $data['getgrandtotal'] = $this->purchasing->getGrandTotal($id);
+            // var_dump($grandtotal);
+            // die;
+            // $grandtotal = $this->input->post('grandtotal');
+            // $totalAll = $total + $grandtotal;
+
+            $total = $this->purchasing->getTotal($id);
+            foreach ($total as $key => $value) {
+                $totalAll = $value->total;
+            }            
+            
+            $this->db->set('grandtotal', $totalAll);
+            $this->db->where('id_permintaan_jasa', $id);
+            $this->db->update('permintaan_jasa_header');
+
+            $this->db->where('id_permintaan_jasa', $this->input->post('id_permintaan_jasa'));
+            $this->db->update('permintaan_jasa_header', [
+                'id_permintaan_jasa' => $this->input->post('id_permintaan_jasa'),
+                'bagian_id' => $this->input->post('bagian_id'),
+                'tgl_pr_jasa' => $this->input->post('tgl_pr_jasa'),
+                'department_id' => $this->input->post('department_id'),
+                // 'grandtotal' => $this->db->query("select ($grandtotal+$total) as grandtotal from permintaan_jasa_header")
             ]);
             $this->session->set_flashdata('flash', 'Diubah');
             redirect('purchasing/editPermintaanJasaNew/' . $id);
@@ -1205,23 +1225,11 @@ class Purchasing extends CI_Controller {
     }
     public function deletePermintaanJasaNewId($id)
     {
-        // $this->db->delete('permintaan_jasa_detail', ['id_jasa_detail' => $id]);
+        $this->db->delete('permintaan_jasa_detail', ['id_jasa_detail' => $id]);
         
-        // $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Dihapus!</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Dihapus!</div>');
         
-        // redirect('purchasing/permintaanJasaNew');
-        // $idjasa = $this->db->get_where('permintaan_jasa_header', ['id_permintaan_jasa' => $id]);
-        // var_dump($idjasa);
-        // die;
-        // $idjasa = "select id_permintaan_jasa from permintaan_pembelian_header where id_permintaan_jasa = $id";
-        // return $this->db->query($idjasa)->result();
-        // var_dump($idjasa);
-        // die;
-        // redirect('purchasing/editPermintaanJasaNew/' . $idjasa);
-        $data = $this->db->get_where('permintaan_jasa_detail', ['id_permintaan_jasa' => $id])->row_array();
-        var_dump($data);
-        die;
-        $this->editPermintaanJasaNew($id);
+        redirect('purchasing/permintaanJasaNew');
     }
     public function simpanJasaAll()
     {
@@ -1260,10 +1268,10 @@ class Purchasing extends CI_Controller {
         $data['title'] = 'Edit Permintaan Jasa New Detail';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->model('General_model', 'gnrl');
-        $data['loc'] = $this->db->get('departement')->result();
+        $data['loc'] = $this->db->get_where('departement', ['kode_loc' => '097'])->result();
         $data['ec'] = $this->db->get('coa_ec')->result();
         $data['na'] = $this->db->get('coa_na')->result();
-        $data['tb'] = $this->db->get('coa_tb')->result();
+        $data['tb'] = $this->db->get_where('coa_tb', ['account' => 10])->result();
         $data['noprjs'] = $this->gnrl->no('PR');
         $email = $this->session->userdata('email');
         $data['user'] = $this->db->query("select a.*,b.* from user a join bagian b on a.bagian_id=b.idbagian where a.email='$email'")->row_array();
@@ -1285,9 +1293,15 @@ class Purchasing extends CI_Controller {
             $this->load->view('purchasing/editPermintaanjasanewDetail', $data);
             $this->load->view('templates/footer');
         } else {
+            $loc = $this->input->post('loc');
+            $ec = $this->input->post('ec');
+            $na = $this->input->post('na');
+            $tb = $this->input->post('tb');
+            $ea = $this->input->post('ea');
             $data = [
                 'deskripsi_jasa' => $this->input->post('deskripsi_jasa'),
-                'coa' => $this->input->post('coa'),
+                // 'coa' => $this->input->post('coa'),
+                'coa' => $loc.'-'.$ec.'-'.$na.'-'.$tb.'-'.$ea.'-'.'000',
                 'satuan' => $this->input->post('satuan'),
                 'qty' => $this->input->post('qty'),
                 'harga' => $this->input->post('harga'),

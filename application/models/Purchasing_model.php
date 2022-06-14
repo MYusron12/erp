@@ -1090,4 +1090,16 @@ class Purchasing_model extends CI_Model
         $this->db->where('id_permintaan_jasa', $id);
         $this->db->update('permintaan_jasa_header', $data);
     }
+
+    public function getGrandTotal($id)
+    {
+        $query = "select grandtotal as grandtotal from permintaan_jasa_header where id_permintaan_jasa = $id";
+        return $this->db->query($query)->result();
+    }
+
+    public function getTotal($id)
+    {
+        $query = "select sum(total) as total from permintaan_jasa_detail where id_permintaan_jasa = $id";
+        return $this->db->query($query)->result();
+    }
 }

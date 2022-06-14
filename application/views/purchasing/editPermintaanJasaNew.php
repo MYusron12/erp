@@ -47,7 +47,7 @@
                         <div class="form-group row">
                             <label for="keterangan" class="col-sm-3 col-form-label">Remarks</label>
                             <div class="col-sm-6">
-                                <textarea class="form-control" id="remarks" name="remarks" rows="3" value=""><?=  $jasa['headerjasa']->remarks ?></textarea>
+                                <textarea class="form-control" id="remarks" name="remarks" rows="3" value="" readonly><?=  $jasa['headerjasa']->remarks ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -69,13 +69,18 @@
                         <div class="form-group row">
                             <label for="coding" class="col-sm-3 col-form-label">Coding</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="coding" name="coding" value="<?=  $jasa['headerjasa']->coding ?>">
+                                <input type="text" class="form-control" id="coding" name="coding" value="<?=  $jasa['headerjasa']->coding ?>" readonly>
                             </div>
                         </div>
                          <div class="form-group row">
                             <label for="codingjasa" class="col-sm-3 col-form-label">Budget Reserved</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="budget_reserved" name="budget_reserved" value="<?=  $jasa['headerjasa']->budget_reserved ?>">
+                                <input type="text" class="form-control" id="budget_reserved" name="budget_reserved" value="<?=  $jasa['headerjasa']->budget_reserved ?>" readonly>
+                                <input type="text" value="<?= $jasa['headerjasa']->grandtotal; ?>">
+                                <?php foreach($getgrandtotal as $row) ?>
+                                <?php 
+                                $getgrandtotal = $row->grandtotal; 
+                                echo $getgrandtotal;?>
                             </div>
                         </div>
                         <a href="<?= base_url('purchasing/editHeader/' . $jasa['headerjasa']->id_permintaan_jasa) ?>" class="btn btn-primary">Edit Header</a>
@@ -246,6 +251,7 @@
                                     name="grandtotal" 
                                     value="<?= $getTotal ?>" 
                                     readonly>
+                                    <input type="text" value="<?= $jasa['headerjasa']->grandtotal ?>">
                                 </div>
                             </div>
                         </div>
@@ -266,4 +272,8 @@
 
 </div>
 <!-- End of Main Content -->
+
+<script>
+
+</script>
 

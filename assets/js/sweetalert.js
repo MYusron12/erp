@@ -29,13 +29,16 @@ $(".tombol-hapus").on("click", function (e) {
 });
 
 const flashDataDetail = $(".flash-data-detail").data("flashdata");
-
+// const base_url = "http://" + window.location.host + '/';
+// const url = base_url + 'purchasing/simpanJasaAll';
+// console.log("url");
 if (flashDataDetail) {
   // Swal({
   //   title: "Data",
   //   text: "Telah Berhasil " + flashDataDetail,
   //   type: "success",
   // });
+  // console.log(url);
 
   Swal.fire({
       title: 'Data Berhasil Disimpan',
@@ -46,7 +49,7 @@ if (flashDataDetail) {
       confirmButtonText:'<i class="fa fa-thumbs-up"></i>',
       confirmButtonAriaLabel: 'Thumbs up, great!',
       html:
-        'Silahkan <b>klik </b>, ' +
+        'Silahkan aja <b>klik </b>, ' +
         '<a href="simpanJasaAll">disini</a> ' +
         'untuk melanjutkan'
       // cancelButtonAriaLabel: 'Thumbs down'
