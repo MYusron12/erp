@@ -44,14 +44,12 @@ if (flashDataDetail) {
       title: 'Data Berhasil Disimpan',
       icon: 'info',
       showCloseButton: true,
-      // showCancelButton: true,
+      showCancelButton: true,
       focusConfirm: false,
       confirmButtonText:'<i class="fa fa-thumbs-up"></i>',
       confirmButtonAriaLabel: 'Thumbs up, great!',
       html:
-        'Silahkan aja <b>klik </b>, ' +
-        '<a href="simpanJasaAll">disini</a> ' +
-        'untuk melanjutkan'
+        'Silahkan melanjutkan'
       // cancelButtonAriaLabel: 'Thumbs down'
     })
 }

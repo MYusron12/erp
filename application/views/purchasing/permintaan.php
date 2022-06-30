@@ -5,7 +5,7 @@
     <h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
     <div class="row">
         <div class="col-lg-12">
-            <?= $this->session->flashdata('message') ?>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('flash'); ?>"></div>
             <div class="card">
                 <div class="card-body">
                     <a href="<?= base_url('purchasing/create') ?>" class="btn btn-primary mb-3"><i class="fas fa-plus"></i>Create Form</a>
@@ -58,7 +58,7 @@
                                            <?php if ($row->status == 1) { ?>
                                                 <a href="<?= base_url('purchasing/view/') . $row->id_permintaan; ?>" class="btn btn-success btn-sm"><i class="far fa-eye"></i>View</a>
                                                 <a href="<?= base_url('purchasing/edit/') . $row->id_permintaan; ?>" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i>Edit</a>
-                                                <a href="<?= base_url('purchasing/hapuspr/') . $row->id_permintaan; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah akan dihapus?')"><i class="fas fa-times"></i>Batal</a>
+                                                <a href="<?= base_url('purchasing/hapuspr/') . $row->id_permintaan; ?>" class="btn btn-danger btn-sm tombol-hapus"><i class="fas fa-times"></i>Batal</a>
                                            <?php }elseif (($row->status == 2) &&  ($row->grandtotal > 1000000) && ($row->status_global == 1) ){?>
                                                  <a href="<?= base_url('report/printpr/') . $row->id_permintaan; ?>" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-print"></i>Cetak</a>
                                                 <a href="<?= base_url('purchasing/view/') . $row->id_permintaan; ?>" class="btn btn-success btn-sm"><i class="far fa-eye"></i>View</a>
@@ -74,7 +74,7 @@
                                                 <a href="<?= base_url('report/printpr/') . $row->id_permintaan; ?>" class="btn btn-secondary btn-sm" target="_blank"><i class="fa fa-print"></i>Cetak</a>
                                                 <a href="<?= base_url('purchasing/view/') . $row->id_permintaan; ?>" class="btn btn-success btn-sm"><i class="far fa-eye"></i>View</a>
                                             <?php }elseif ($row->status == 0) { ?>
-                                             <a href="<?= base_url('purchasing/hapuspr/') . $row->id_permintaan; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah akan dihapus?')"><i class="fas fa-times"></i>Batal</a>
+                                             <a href="<?= base_url('purchasing/hapuspr/') . $row->id_permintaan; ?>" class="btn btn-danger btn-sm tombol-hapus"><i class="fas fa-times"></i>Batal</a>
                                       
                                              <?php }else{ ?>
                                                 <a href="<?= base_url('report/printpr/') . $row->id_permintaan; ?>" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-print"></i>Cetak</a>

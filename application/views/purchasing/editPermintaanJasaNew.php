@@ -76,11 +76,11 @@
                             <label for="codingjasa" class="col-sm-3 col-form-label">Budget Reserved</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="budget_reserved" name="budget_reserved" value="<?=  $jasa['headerjasa']->budget_reserved ?>" readonly>
-                                <input type="text" value="<?= $jasa['headerjasa']->grandtotal; ?>">
+                                <input type="hidden" value="<?= $jasa['headerjasa']->grandtotal; ?>">
                                 <?php foreach($getgrandtotal as $row) ?>
                                 <?php 
                                 $getgrandtotal = $row->grandtotal; 
-                                echo $getgrandtotal;?>
+                                $getgrandtotal;?>
                             </div>
                         </div>
                         <a href="<?= base_url('purchasing/editHeader/' . $jasa['headerjasa']->id_permintaan_jasa) ?>" class="btn btn-primary">Edit Header</a>
@@ -164,6 +164,7 @@
                                             </td>
                                             <td><input type="text" class="form-control" id="hargarow" name="harga_row" onkeyup="myfunctionHargaJasaRow()"></td>
                                             <td><input type=" text" class="form-control" id="totalrow" name="total_row" readonly></td>
+                                            <input type="hidden" name="grandtotal" id="grandtotal" value="<?= $jasa['headerjasa']->grandtotal ?>">
                                         </tr>
                                     </tbody>
                                 </table>
@@ -217,7 +218,7 @@
                                             <td>
                                                 <!-- <a href="#" data-toggle="modal" data-target="#ubah<?= $value->id_jasa_detail ?>" class="badge badge-success">edit</a> -->
                                                 <a href="<?= base_url('purchasing/editDetail/' . $value->id_jasa_detail) ?>" class="badge badge-success">edit</a>
-                                                <a href="<?= base_url('purchasing/deletePermintaanJasaNewId/' . $value->id_jasa_detail ) ?>" class="badge badge-danger" onclick="return confirm('Apakah akan dihapus')">hapus</a>
+                                                <a href="<?= base_url('purchasing/deletePermintaanJasaNewId/' . $value->id_jasa_detail ) ?>" class="badge badge-danger tombol-hapus">hapus</a>
                                             </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -251,7 +252,7 @@
                                     name="grandtotal" 
                                     value="<?= $getTotal ?>" 
                                     readonly>
-                                    <input type="text" value="<?= $jasa['headerjasa']->grandtotal ?>">
+                                    <input type="hidden" value="<?= $jasa['headerjasa']->grandtotal ?>">
                                 </div>
                             </div>
                         </div>

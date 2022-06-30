@@ -1102,4 +1102,16 @@ class Purchasing_model extends CI_Model
         $query = "select sum(total) as total from permintaan_jasa_detail where id_permintaan_jasa = $id";
         return $this->db->query($query)->result();
     }
+
+    public function getGrandTotalHeader($idjasa)
+    {
+        $query = "select sum(total) as total from permintaan_jasa_detail where id_permintaan_jasa = $idjasa";
+        return $this->db->query($query)->result();
+    }
+
+    public function getIdJasaHeader($id)
+    {
+        $query = "select distinct(b.id_permintaan_jasa) as id from permintaan_jasa_detail a join permintaan_jasa_header b on b.id_permintaan_jasa=a.id_permintaan_jasa where a.id_jasa_detail = $id";
+        return $this->db->query($query)->result();
+    }
 }

@@ -1,4 +1,4 @@
-
+<div class="flash-data" data-flashdata="<?= $this->session->flashdata('flash'); ?>"></div>
         <!-- Begin Page Content -->
         <div class="container-fluid">
 

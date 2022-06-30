@@ -56,30 +56,37 @@ class Auth extends CI_Controller
           $this->session->set_userdata($data);
           // admin
           if ($user['role_id'] == 1) {
+            $this->session->set_flashdata('flash', 'Masuk');
             redirect('admin');
             // finance
           } elseif ($user['role_id'] == 2) {
+            $this->session->set_flashdata('flash', 'Masuk');
             redirect('transaksi');
             // purchasing
           } elseif ($user['role_id'] == 3) {
+            $this->session->set_flashdata('flash', 'Masuk');
             redirect('purchasing');
             // head
           } elseif ($user['role_id'] == 4) {
+            $this->session->set_flashdata('flash', 'Masuk');
             redirect('approval');
             // ekspedisi
           } elseif ($user['role_id'] == 5) {
-            redirect('ekspedisi');
+            $this->session->set_flashdata('flash', 'Masuk');
+            redirect('adminops');
             //maintenance
           }elseif ($user['role_id'] == 6) {
-             redirect('maintenance');
+            $this->session->set_flashdata('flash', 'Masuk');
+            redirect('maintenance');
           }elseif ($user['role_id']== 7){
-              redirect('inventory');
-        } elseif ($user['role_id']== 8) {
+            $this->session->set_flashdata('flash', 'Masuk');
+            redirect('inventory');
+          } elseif ($user['role_id']== 8) {
+            $this->session->set_flashdata('flash', 'Masuk');
             redirect('hrd');
-
-        } elseif ($user['role_id']== 9) {
+          } elseif ($user['role_id']== 9) {
+            $this->session->set_flashdata('flash', 'Masuk');
             redirect('bd');
-
         }
           $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
           Wrong password!..

@@ -7,7 +7,6 @@
 
     <div class="row">
         <div class="col-lg-12">
-        <?= $this->session->flashdata('message') ?>
             <div class="card">
                 <div class="card-body">
                     <a href="<?= base_url('purchasing/tambahPermintaanJasaNew') ?>" class="btn btn-primary mb-3"><i class="fas fa-plus"></i>Tambah Permintaan Jasa</a>

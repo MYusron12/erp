@@ -51,31 +51,5 @@
 			</div>
 		
 		</div>
-
-			
-
-
-
-		<!--===================================================-->
-		<!-- DEMO PURPOSE ONLY -->
-		<!--===================================================-->
-		<!--<div class="demo-bg">
-			<div id="demo-bg-list">
-				<div class="demo-loading"><i class="fa fa-refresh"></i></div>
-				<img class="demo-chg-bg bg-trans" src="img/bg-img/thumbs/bg-trns.jpg" alt="Background Image">
-				<img class="demo-chg-bg" src="img/bg-img/thumbs/bg-img-1.jpg" alt="Background Image">
-				<img class="demo-chg-bg active" src="img/bg-img/thumbs/bg-img-2.jpg" alt="Background Image">
-				<img class="demo-chg-bg" src="img/bg-img/thumbs/bg-img-3.jpg" alt="Background Image">
-				<img class="demo-chg-bg" src="img/bg-img/thumbs/bg-img-4.jpg" alt="Background Image">
-				<img class="demo-chg-bg" src="img/bg-img/thumbs/bg-img-5.jpg" alt="Background Image">
-				<img class="demo-chg-bg" src="img/bg-img/thumbs/bg-img-6.jpg" alt="Background Image">
-				<img class="demo-chg-bg" src="img/bg-img/thumbs/bg-img-7.jpg" alt="Background Image">
-			</div>
-		</div>-->
-		<!--===================================================-->
 	</div>
-	<!--===================================================-->
-	<!-- END OF CONTAINER -->
-	<!--JAVASCRIPT-->
-	<!--=================================================-->
 	
