@@ -219,19 +219,24 @@ class Purchasing_model extends CI_Model
         date_default_timezone_set('Asia/Jakarta');
         return $kodelokasi . '/' . date('dmy') . '/' . $kd;
     }
+    public function max()
+    {
+        $query = "select max(id_permintaan_jasa)+1 as max from permintaan_jasa_all";
+        return $this->db->query($query)->result();
+    }
     public function simpandataprjasa()
     {
         // menangkap data post untuk header 
-        $iddepartment = $this->session->userdata('hub');
-        $hub = $this->session->userdata('hub');
-        $nopr = $this->input->post('noprjasa', true);
-        $tglprjasa = date('Y-m-d', strtotime($this->input->post('tgljasa', true)));
-        $bagian = $this->input->post('bagianjasa', true);
-        $remarks = $this->input->post('keterjasa', true);
-        $cprno = $this->input->post('cprnojasa', true);
+        $iddepartment = $this->session->userdata('hub'); //
+        $hub = $this->session->userdata('hub'); //
+        $nopr = $this->input->post('noprjasa', true); //
+        $tglprjasa = date('Y-m-d', strtotime($this->input->post('tgljasa', true))); //
+        $bagian = $this->input->post('bagianjasa', true); //
+        $remarks = $this->input->post('keterjasa', true); //
+        $cprno = $this->input->post('cprnojasa', true); //
         $verifikasikode = $this->input->post('verifikasikode', true);
-        $budget = $this->input->post('budgetjasa', true);
-        $coding = $this->input->post('codingjasa', true);
+        $budget = $this->input->post('budgetjasa', true); //
+        $coding = $this->input->post('codingjasa', true); //
         $item_1 = $this->input->post('item_1', true);
         $item_2 = $this->input->post('item_2', true);
         $item_3 = $this->input->post('item_3', true);
@@ -263,24 +268,24 @@ class Purchasing_model extends CI_Model
         $tb3 = $this->input->post('tb_3', true);
         $ea3 = $this->input->post('ea_3', true);
 
-
         $data = [
-            'department_id' => $iddepartment,
-            'no_pr_jasa' => $nopr,
-            'remarks' => $remarks,
-            'bagian_id' => $bagian,
-            'tgl_pr_jasa' => $tglprjasa,
-            'cpr_no' => $cprno,
+            'parent_id' => $this->input->post('parentid'),
+            'department_id' => $iddepartment, //
+            'no_pr_jasa' => $nopr, //
+            'remarks' => $remarks, //
+            'bagian_id' => $bagian, //
+            'tgl_pr_jasa' => $tglprjasa, //
+            'cpr_no' => $cprno, //
             'verifikasi_kode' => $verifikasikode,
-            'coding' => $coding,
-            'budget_reserved' => $budget,
-            'status' => 1,
-            'status_global' => 1,
-            'user_id' => $this->session->userdata('iduser'),
-            'created_by' => $this->session->userdata('iduser'),
-            'created_at' => date("Y-m-d h:i:sa"),
-            'is_deleted' => 0,
-            'hub' => $hub,
+            'coding' => $coding, //
+            'budget_reserved' => $budget, //
+            'status' => 1, //
+            'status_global' => 1, //
+            'user_id' => $this->session->userdata('iduser'), //
+            'created_by' => $this->session->userdata('iduser'),  //
+            'created_at' => date("Y-m-d h:i:sa"), //
+            'is_deleted' => 0, //
+            'hub' => $hub, //
             'coa1' => $loc1 . '-' . $ec1 . '-' . $na1 . '-' . $tb1 . '-' . $ea1,
             'coa2' => $loc2 . '-' . $ec2 . '-' . $na2 . '-' . $tb2 . '-' . $ea2,
             'coa3' => $loc3 . '-' . $ec3 . '-' . $na3 . '-' . $tb3 . '-' . $ea3,
@@ -976,7 +981,7 @@ class Purchasing_model extends CI_Model
         $query = "select 
         * 
         from permintaan_jasa_header
-        order by id_permintaan_jasa desc";
+        order by tgl_pr_jasa desc";
         return $this->db->query($query)->result_array();
     }
     public function permintaanJasaNewHeaderDetailId($id)

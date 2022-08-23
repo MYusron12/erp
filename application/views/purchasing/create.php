@@ -155,3 +155,25 @@
 
 </div>
 <!-- End of Main Content -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript">
+    function grandtotal() {
+        var tabel = $("#tabel tbody tr").length;
+        var grandtotalbarang = 0;
+        for (x = 0; x < tabel; x++) {
+        var tr = $("#tabel tbody tr")[x];
+        var count = $(tr).attr('id');
+        count = count.substring(4);
+        var total = $("#total_" + count).val();
+        var total = total.replace(/[^,\d]/g, '');
+        var total = total.replace(',', '.');
+        grandtotalbarang = Number(grandtotalbarang) + Number(total);
+        } // /for
+        console.log(tabel);
+        console.log(x);
+        // grandtotalbarang = grandtotalbarang.toFixed(2);
+        // $('#grandtotal').val(grandtotalbarang);  
+        $('#grandtotalbarang').val(grandtotalbarang);  
+        // console.log(grandtotalbarang);
+    }
+    </script>

@@ -420,7 +420,7 @@ class Purchasing extends CI_Controller {
         $data['bagian'] = $this->db->get('bagian')->result();
         $data['ppn'] = [['nppn' => 1, 'persen' => '1%'], ['nppn' => 10, 'persen' => '10%'], ['nppn' => 11, 'persen' => '11%']];
         $data['pph'] = [['npph' => 2, 'persen' => '2%'], ['npph' => 4, 'persen' => '4%'], ['npph' => 10, 'persen' => '10%']];
-
+        $data['max'] = $this->purchasing->max();
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/topbar', $data);
@@ -1221,6 +1221,7 @@ class Purchasing extends CI_Controller {
        redirect('purchasing/permintaanJasaNew/');
     //    redirect('purchasing/editPermintaanJasaNew/' . $id);
     }
+
     function coa() {
         $data = $this->db->get('departement')->result_array();
         echo json_encode($data);
@@ -1229,6 +1230,20 @@ class Purchasing extends CI_Controller {
     function ec()
     {
         $data = $this->db->get('coa_ec')->result_array();
+        echo json_encode($data);
+    }
+    function tb()
+    {
+        $data = $this->db->get('coa_tb')->result_array();
+        echo json_encode($data);
+    }
+    function na()
+    {
+        $data = $this->db->get('coa_na')->result_array();
+        echo json_encode($data);
+    }
+    function satuan(){
+        $data = $this->db->get('satuan')->result_array();
         echo json_encode($data);
     }
 

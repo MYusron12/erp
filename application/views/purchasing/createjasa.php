@@ -13,6 +13,9 @@
 
             <form action="<?= base_url('purchasing/create_pr_jasa'); ?>" method="post" onsubmit="return validateForm()">
                 <div class="row">
+                    <?php foreach($max as $row){
+                        $max = $row->max;
+                    } ?>
                     <div class="col-lg-6">
                         <div class="form-group row">
                             <label for="noprjasa" class="col-sm-3 col-form-label">No PR Jasa</label>
@@ -20,28 +23,24 @@
                                 <input type="text" class="form-control" id="noprjasa" name="noprjasa" value="<?= $noprjs; ?>" readonly>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label for="tgljasa" class="col-sm-3 col-form-label">Tgl PR Jasa</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control tanggal" id="tgljasa" name="tgljasa" value="<?= date('d-m-Y'); ?>" autocomplete="off" readonly>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label for="bagianjasa" class="col-sm-3 col-form-label">Bagian</label>
                             <div class="col-sm-6">
                                 <input name="" id="bagian" value="<?= $user['nama_bagian']; ?>" class="form-control" readonly>
                                 <input type="hidden" name="bagianjasa" id="bagian" value="<?= $user['idbagian']; ?>" class="form-control">
-
+                                <input type="hidden" name="parentid" id="parentid" value="<?= $max ?>" class="form-control">
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label for="namareqjasa" class="col-sm-3 col-form-label">Nama Request</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="namareqjasa" name="nama_req" value="<?= $user['name']; ?>">
-
                             </div>
                         </div>
 
@@ -86,10 +85,11 @@
                 <hr>
                 <div class="row">
                     <div class="col-lg-12 mt-3">
+                        <input type="button" value="Add Jasa" class="btn btn-primary mb-3" id="tambahjasa">
+                        <br>
                         <table class="table table-bordered w-100" id="data_table_barang">
                             <thead class="bg-primary text-white">
                                 <tr>
-                                    <th scope="col" width="2%">No</th>
                                     <th scope="col" width="25%">Detail Permintaan</th>
                                     <th scope="col" width="6%">LOC</th>
                                     <th scope="col" width="6%">EC</th>
@@ -100,12 +100,12 @@
                                     <th scope="col" width="10%">Jumlah</th>
                                     <th scope="col" width="10%">Harga</th>
                                     <th scope="col" width="15%">Total</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr id="row_1">
-                                    <td>1</td>
-                                    <td><input type="text" class="form-control" id="item_1" name="item_1" /></td>
+                                    <td><textarea class="form-control" name="item_1" id="item_1" cols="2" rows="4"></textarea></td>
                                     <td><select id="loc" name="loc_1" class="form-control selectpicker" data-style="btn-primary" data-live-search="true" required>
                                             <option value="">Pilih</option>
                                             <?php foreach ($loc as $row) : ?>
@@ -138,87 +138,10 @@
                                                     <?= $row->nama_satuan ?></option>
                                             <?php endforeach; ?>
                                         </select></td>
-                                    <td><input type="text" class="form-control" id="jumlah_1" name="jumlah_1" onkeyup="getTotal(1)" /></td>
+                                    <td><input type="text" class="form-control" id="qty_1" name="qty_1" onkeyup="getTotal(1)" /></td>
                                     <td><input type="text" class="form-control" id="harga_1" name="harga_1" onkeyup="myfunctionHarga(1)"></td>
                                     <td><input type="text" class="form-control" id="total_1" name="total_1" readonly /></td>
-                                </tr>
-                                <tr id="row_2">
-                                    <td>2</td>
-                                    <td><input type="text" class="form-control" id="item_2" name="item_2" /></td>
-                                    <td><select id="loc" name="loc_2" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($loc as $row) : ?>
-                                                <option value="<?= $row->kode_loc ?>"><?= $row->kode_loc . '|' . $row->nama; ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><select id="ec" name="ec_2" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($ec as $row) : ?>
-                                                <option value="<?= $row->account ?>"><?= $row->account . '|' . $row->nama; ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><select id="na" name="na_2" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($na as $row) : ?>
-                                                <option value="<?= $row->account ?>"><?= $row->account . '|' . $row->nama; ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><select id="tb" name="tb_2" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($tb as $row) : ?>
-                                                <option value="<?= $row->account ?>"><?= $row->account . '|' . $row->nama; ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><input type="number" class="form-control" id="ea" name="ea_2" /></td>
-                                    <td><select name="satuan_2" id="satuan_2" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($satuan as $row) : ?>
-                                                <option value="<?= $row->id_satuan; ?>" <?= set_select('satuan', $row->id_satuan); ?>>
-                                                    <?= $row->nama_satuan ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><input type="text" class="form-control" id="jumlah_2" name="jumlah_2" onkeyup="getTotal(2)" /></td>
-                                    <td><input type="text" class="form-control" id="harga_2" name="harga_2" onkeyup="myfunctionHarga(2)"></td>
-                                    <td><input type="text" class="form-control" id="total_2" name="total_2" readonly /></td>
-                                </tr>
-                                <tr id="row_3">
-                                    <td>3</td>
-                                    <td><input type="text" class="form-control" id="item_3" name="item_3" /></td>
-                                    <td><select id="loc" name="loc_3" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($loc as $row) : ?>
-                                                <option value="<?= $row->kode_loc ?>"><?= $row->kode_loc . '|' . $row->nama; ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><select id="ec" name="ec_3" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($ec as $row) : ?>
-                                                <option value="<?= $row->account ?>"><?= $row->account . '|' . $row->nama; ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><select id="na" name="na_3" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($na as $row) : ?>
-                                                <option value="<?= $row->account ?>"><?= $row->account . '|' . $row->nama; ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><select id="tb" name="tb_3" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($tb as $row) : ?>
-                                                <option value="<?= $row->account ?>"><?= $row->account . '|' . $row->nama; ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><input type="number" class="form-control" id="ea" name="ea_3" value="" /></td>
-                                    <td><select name="satuan_3" id="satuan_3" class="form-control selectpicker" data-style="btn-primary" data-live-search="true">
-                                            <option value="">Pilih</option>
-                                            <?php foreach ($satuan as $row) : ?>
-                                                <option value="<?= $row->id_satuan; ?>" <?= set_select('satuan', $row->id_satuan); ?>>
-                                                    <?= $row->nama_satuan ?></option>
-                                            <?php endforeach; ?>
-                                        </select></td>
-                                    <td><input type="text" class="form-control" id="jumlah_3" name="jumlah_3" onkeyup="getTotal(3)" /></td>
-                                    <td><input type="text" class="form-control" id="harga_3" name="harga_3" onkeyup="myfunctionHarga(3)"></td>
-                                    <td><input type="text" class="form-control" id="total_3" name="total_3" readonly /></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow1('1')"><i class="fas fa-times"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -242,10 +165,7 @@
                 </div>
             </form>
         </div>
-
     </div>
-
-
 </div>
 <!-- /.container-fluid -->
 
@@ -254,58 +174,89 @@
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("#jumlah_1, #harga_1").keyup(function() {
-            var harga = $("#harga_1").val();
-            var jumlah = $("#jumlah_1").val();
-            var harga = harga.replace(/[^,\d]/g, '');
-            var harga = harga.replace(',', '.');
-
-            var total = harga * jumlah;
-            $("#total_1").val(formatMoney(total));
+    function removeRow1(tr_id) {
+        $("#data_table_barang tbody tr#row_" + tr_id).remove();
+        grandtotal();
+    }
+    
+    $(function(){
+    $('#tambahjasa').on('click', function(){
+        var tabel = $('#data_table_barang');
+        var tr = $('#data_table_barang tbody tr').length;
+        var row_id = tr + 1;
+        console.log(row_id);
+        var html = "";
+        html += '<tr id="row_' + row_id + '">';
+        html += '<input type="text" name="parentid" value=""/>';
+        html += '<td><textarea name="deskripsi_jasa[]" id="deskripsi_jasa_' + row_id + '" cols="40" rows="4"></textarea></td>';
+        
+        $.ajax({
+        url: base_url + 'purchasing/coa',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data){
+        html += '<td><select name="loc[]" id="loc_' + row_id + '" class="form-control selectpicker" data-live-search="true" data-style="btn-primary"><option value="">Pilih</option>'
+        $.each(data, function (index, value) {
+            html += '<option value="' + value.kode_loc + '">' + value.kode_loc + '|' + value.nama + '</option>';
         });
-    });
-    $(document).ready(function() {
-        $("#jumlah_2, #harga_2").keyup(function() {
-
-            var harga = $("#harga_2").val();
-            var jumlah = $("#jumlah_2").val();
-            var harga = harga.replace(/[^,\d]/g, '');
-            var harga = harga.replace(',', '.');
-
-
-            var total = harga * jumlah;
-            $("#total_2").val(formatMoney(total));
+        '</select></td>';
+        }
         });
-    });
-    $(document).ready(function() {
-        $("#jumlah_3, #harga_3").keyup(function() {
-            var harga = $("#harga_3").val();
-            var jumlah = $("#jumlah_3").val();
-            var harga = harga.replace(/[^,\d]/g, '');
-            var harga = harga.replace(',', '.');
-
-            var total = harga * jumlah;
-            $("#total_3").val(formatMoney(total));
+        $.ajax({
+        url: base_url + 'purchasing/ec',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data){
+        html += '<td><select name="loc[]" id="loc_' + row_id + '" class="form-control selectpicker" data-live-search="true" data-style="btn-primary"><option value="">Pilih</option>'
+        $.each(data, function (index, value) {
+            html += '<option value="' + value.account + '">' + value.account + '|' + value.nama + '</option>';
         });
-    });
-    $(document).ready(function() {
-        $("#jumlah_1, #harga_1, #jumlah_2, #harga_2, #jumlah_3, #harga_3").keyup(function() {
-            var harga1 = $("#harga_1").val();
-            var jumlah1 = $("#jumlah_1").val();
-            var harga2 = $("#harga_2").val();
-            var jumlah2 = $("#jumlah_2").val();
-            var harga3 = $("#harga_3").val();
-            var jumlah3 = $("#jumlah_3").val();
-            var harga1 = harga1.replace(/[^,\d]/g, '');
-            var harga1 = harga1.replace(',', '.');
-            var harga2 = harga2.replace(/[^,\d]/g, '');
-            var harga2 = harga2.replace(',', '.');
-            var harga3 = harga3.replace(/[^,\d]/g, '');
-            var harga3 = harga3.replace(',', '.');
-
-            var result = harga1 * jumlah1 + harga2 * jumlah2 + harga3 * jumlah3;
-            $("#grandtotalbarang").val(formatMoney(result));
+        '</select></td>';
+        }
+        });
+        $.ajax({
+        url: base_url + 'purchasing/na',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data){
+        html += '<td><select name="ec[]" id="ec_' + row_id + '" class="form-control selectpicker" data-live-search="true" data-style="btn-primary"><option value="">Pilih</option>';
+        $.each(data, function(index, value){
+            html += '<option value="'+ value.account +'">'+ value.account +'|'+ value.nama +'</option>';
+        });
+        '</select></td>';             
+        }
+        });           
+        $.ajax({
+        url: base_url + 'purchasing/tb',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data){
+        html += '<td><select name="loc[]" id="loc_' + row_id + '" class="form-control selectpicker" data-live-search="true" data-style="btn-primary"><option value="">Pilih</option>'
+        $.each(data, function (index, value) {
+            html += '<option value="' + value.account + '">' + value.account + '|' + value.nama + '</option>';
+        });
+        '</select></td>';  
+        html += '<td><input type="number" class="form-control" id="ea[]" name="ea_' + row_id + '" value="000"  /></td>';
+        }
+        });
+        $.ajax({
+        url: base_url + 'purchasing/satuan',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data){
+        html += '<td><select name="loc[]" id="loc_' + row_id + '" class="form-control selectpicker" data-live-search="true" data-style="btn-primary"><option value="">Pilih</option>'
+        $.each(data, function (index, value) {
+            html += '<option value="' + value.id_satuan + '">' + value.id_satuan + '|' + value.nama_satuan + '</option>';
+        });
+        '</select></td>';
+        html += '<td><input type="text" class="form-control" id="qty_' + row_id + '" name="qty[]" onkeyup="getTotal(' + row_id + ')"></td>';
+        html += '<td><input type="text" class="form-control" id="harga_' + row_id + '" name="harga[]" onkeyup="myfunctionHarga(' + row_id + ')"></td>';
+        html += '<td><input type=" text" class="form-control" id="total_' + row_id + '" name="total[]" readonly></td>';
+        html += '<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow1(' + row_id + ')"><i class="fas fa-times"></i></button></td>';
+        $('#data_table_barang tbody:last-child').append(html);
+        $('.selectpicker').selectpicker("refresh");
+        }
+        });
         });
     });
 </script>
